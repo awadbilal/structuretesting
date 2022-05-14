@@ -9,6 +9,11 @@ import com.facebook.react.ReactRootView;
 
 import expo.modules.ReactActivityDelegateWrapper;
 
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(null);
+}
+
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
