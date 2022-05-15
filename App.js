@@ -14,7 +14,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="EmailRegister" component={EmailRegister} />
         <Stack.Screen name="Login" component={Login} />

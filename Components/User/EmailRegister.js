@@ -13,7 +13,9 @@ import Background from '../../Assets/BackgroundappBackground.png';
 import UserIcon from 'react-native-vector-icons/AntDesign';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
-import { auth } from '../../firebaseConfig';
+import { auth, db } from '../../firebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const EmailRegister = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -23,20 +25,29 @@ const EmailRegister = ({ navigation }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = () => {
+  async function handleClick() {
     setIsLoading(true);
-    auth
-      .createUserWithEmailAndPassword(auth.getAuth(), formData.email, formData.password)
+    await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    )
       .then((authUser) => {
-        auth.updateProfile(authUser.user, {
-          displayName: name
+        console.log(authUser);
+        updateProfile(authUser.user, {
+          displayName: name,
         });
-        console.log(authUser.user);
-        navigation.replace("Home");
+        try {
+          (async function pushData() {
+            await addDoc(collection(db, 'users'), formData);
+          })();
+        } catch (err) {
+          alert(err.message);
+        }
       })
-      .catch((error) => alert(error.message));
+      .catch((err) => alert(err.message));
     setIsLoading(false);
-  };
+  }
 
   return (
     <ImageBackground
@@ -56,24 +67,24 @@ const EmailRegister = ({ navigation }) => {
 
           <Text style={styles.text}>Name</Text>
           <Input
-            placeholder='John Doe'
-            type='text'
+            placeholder="John Doe"
+            type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <UserIcon
-                name='user'
-                color='#00F0FF'
+                name="user"
+                color="#00F0FF"
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           <Text style={styles.text}>Email</Text>
           <Input
-            placeholder='John.doe@gmail.com'
-            type='email'
+            placeholder="John.doe@gmail.com"
+            type="email"
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
@@ -82,17 +93,17 @@ const EmailRegister = ({ navigation }) => {
             inputContainerStyle={[styles.input]}
             leftIcon={
               <EmailIcon
-                name='email-check-outline'
-                color='#00F0FF'
+                name="email-check-outline"
+                color="#00F0FF"
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           <Text style={styles.text}>Password</Text>
           <Input
-            placeholder='******************'
+            placeholder="******************"
             secureTextEntry
-            type='password'
+            type="password"
             value={formData.password}
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
@@ -101,8 +112,8 @@ const EmailRegister = ({ navigation }) => {
             inputContainerStyle={[styles.input]}
             leftIcon={
               <PasswordIcon
-                name='key'
-                color='#00F0FF'
+                name="key"
+                color="#00F0FF"
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
@@ -110,18 +121,18 @@ const EmailRegister = ({ navigation }) => {
 
           {isLoading ? (
             <Button
-              type='solid'
-              color='#3D1273'
-              radius='16'
+              type="solid"
+              color="#3D1273"
+              radius="16"
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               loading
             />
           ) : (
             <Button
-              type='solid'
-              radius='16'
-              title='Get Started'
+              type="solid"
+              radius="16"
+              title="Get Started"
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={handleClick}
