@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,6 +13,7 @@ import Background from '../../Assets/BackgroundappBackground.png';
 import UserIcon from 'react-native-vector-icons/AntDesign';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { auth } from '../../firebaseConfig';
 
 const EmailRegister = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,17 @@ const EmailRegister = ({ navigation }) => {
 
   const handleClick = () => {
     setIsLoading(true);
+    auth
+      .createUserWithEmailAndPassword(auth.getAuth(), formData.email, formData.password)
+      .then((authUser) => {
+        auth.updateProfile(authUser.user, {
+          displayName: name
+        });
+        console.log(authUser.user);
+        navigation.replace("Home");
+      })
+      .catch((error) => alert(error.message));
+    setIsLoading(false);
   };
 
   return (

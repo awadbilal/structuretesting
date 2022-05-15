@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,16 +12,36 @@ import Logo from '../../Assets/logo.png';
 import Background from '../../Assets/BackgroundappBackground.png';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { auth } from '../../firebaseConfig';
 
 const Login = ({ navigation }) => {
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect(() => {
+  //   async function userfetch(){
+  //     const authUser = await auth.getAuth();
+  //     const unsubscribe = await auth.onAuthStateChanged((authUser) => {
+  //       if(authUser) navigation.replace("Home");
+  //     });
+  //     return unsubscribe;
+  //   }
+
+  //   return userfetch;
+  // },[])
+
   const handleClick = () => {
     setIsLoading(true);
+    auth.signInWithEmailAndPassword(formData.email, formData.password)
+    .then(() => {
+      setIsLoading(false);
+      navigation.replace("Home");
+    })
+    .catch((error) => alert(error.message));
   };
 
   return (
