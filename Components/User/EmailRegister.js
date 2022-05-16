@@ -13,11 +13,12 @@ import Background from '../../Assets/BackgroundappBackground.png';
 import UserIcon from 'react-native-vector-icons/AntDesign';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
-import { auth, db } from '../../firebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
+import { db, auth } from '../../firebaseConfig';
+import '../../firebaseConfig';
 
-const EmailRegister = ({ navigation }) => {
+const EmailRegister = ({ navigation, setUser }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,26 +27,8 @@ const EmailRegister = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleClick() {
-    setIsLoading(true);
-    await createUserWithEmailAndPassword(
-      auth,
-      formData.email,
-      formData.password
-    )
-      .then((authUser) => {
-        console.log(authUser);
-        updateProfile(authUser.user, {
-          displayName: name,
-        });
-        try {
-          (async function pushData() {
-            await addDoc(collection(db, 'users'), formData);
-          })();
-        } catch (err) {
-          alert(err.message);
-        }
-      })
-      .catch((err) => alert(err.message));
+    // Handle Sign Up then saving the user onto firestore functionality
+
     setIsLoading(false);
   }
 
