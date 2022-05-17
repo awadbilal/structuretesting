@@ -2,6 +2,7 @@ import * as React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ImageBackground } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import Background from './Assets/appBackground.png';
@@ -22,14 +23,13 @@ import Register from './Components/User/Register';
 import EmailRegister from './Components/User/EmailRegister';
 import Login from './Components/User/Login';
 import ResetPassword from './Components/User/ResetPassword';
-import { ImageBackground } from 'react-native-web';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState(true);
+  const [user, setUser] = React.useState(false);
   const [intro, setIntro] = React.useState(false);
 
   // NavigationContainer themes
