@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { Button, Image, Input } from 'react-native-elements';
+import { Button, Image } from 'react-native-elements';
 import Logo from '../../Assets/logo.png';
-import Background from '../../Assets/BackgroundappBackground.png';
 import GoogleIcon from 'react-native-vector-icons/FontAwesome';
 import FacebookIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { signInWithRedirect, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../../firebaseConfig';
 
-const Register = ({ navigation }) => {
+const Register = ({ navigation, setUser }) => {
   const handleGoogle = () => {
     // Handle Google Sign in Functionality
   };
@@ -26,94 +22,87 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground
-      source={Background}
-      style={{ width: '100%', height: '100%' }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.container}>
-          <Image source={Logo} style={styles.logo} />
-          <Text style={styles.title}>Get Started</Text>
-          <Text style={[styles.subText, { marginBottom: 30 }]}>
-            Log in to your account
-          </Text>
+      <View style={styles.container}>
+        <Image source={Logo} style={styles.logo} />
+        <Text style={styles.title}>Get Started</Text>
+        <Text style={[styles.subText, { marginBottom: 30 }]}>
+          Log in to your account
+        </Text>
 
-          <Button
-            type="solid"
-            title="Sign-up using Google"
-            icon={
-              <GoogleIcon
-                name="google"
-                color="#00F0FF"
-                style={{ marginRight: 20, fontSize: 22 }}
-              />
-            }
-            iconPosition="left"
-            buttonStyle={{
-              backgroundColor: 'transparent',
-              width: '100%',
-              justifyContent: 'flex-start',
-            }}
-            containerStyle={styles.button}
-            onPress={handleGoogle}
-          />
-          <Button
-            type="solid"
-            title="Sign-up using Facebook"
-            icon={
-              <FacebookIcon
-                name="facebook"
-                color="#00F0FF"
-                style={{ marginRight: 20, fontSize: 22 }}
-              />
-            }
-            iconPosition="left"
-            buttonStyle={{
-              backgroundColor: 'transparent',
-              width: '100%',
-              justifyContent: 'flex-start',
-            }}
-            containerStyle={styles.button}
-            onPress={() => handleFacebook()}
-          />
-          <Button
-            type="solid"
-            title="Sign-up using E-mail"
-            icon={
-              <EmailIcon
-                name="email-check-outline"
-                color="#00F0FF"
-                style={{ marginRight: 20, fontSize: 22 }}
-              />
-            }
-            iconPosition="left"
-            buttonStyle={{
-              backgroundColor: 'transparent',
-              width: '100%',
-              justifyContent: 'flex-start',
-            }}
-            containerStyle={styles.button}
-            onPress={() => navigation.navigate('EmailRegister')}
-          />
+        <Button
+          type='solid'
+          title='Sign-up using Google'
+          icon={
+            <GoogleIcon
+              name='google'
+              color='#00F0FF'
+              style={{ marginRight: 20, fontSize: 22 }}
+            />
+          }
+          iconPosition='left'
+          buttonStyle={{
+            backgroundColor: 'transparent',
+            width: '100%',
+            justifyContent: 'flex-start',
+          }}
+          containerStyle={styles.button}
+          onPress={handleGoogle}
+        />
+        <Button
+          type='solid'
+          title='Sign-up using Facebook'
+          icon={
+            <FacebookIcon
+              name='facebook'
+              color='#00F0FF'
+              style={{ marginRight: 20, fontSize: 22 }}
+            />
+          }
+          iconPosition='left'
+          buttonStyle={{
+            backgroundColor: 'transparent',
+            width: '100%',
+            justifyContent: 'flex-start',
+          }}
+          containerStyle={styles.button}
+          onPress={() => handleFacebook()}
+        />
+        <Button
+          type='solid'
+          title='Sign-up using E-mail'
+          icon={
+            <EmailIcon
+              name='email-check-outline'
+              color='#00F0FF'
+              style={{ marginRight: 20, fontSize: 22 }}
+            />
+          }
+          iconPosition='left'
+          buttonStyle={{
+            backgroundColor: 'transparent',
+            width: '100%',
+            justifyContent: 'flex-start',
+          }}
+          containerStyle={styles.button}
+          onPress={() => navigation.navigate('EmailRegister')}
+        />
 
+        <Text style={[styles.subText, { marginTop: 30, alignSelf: 'center' }]}>
+          Already have an account?{' '}
           <Text
-            style={[styles.subText, { marginTop: 30, alignSelf: 'center' }]}
+            style={styles.signin}
+            onPress={() => navigation.navigate('Login')}
           >
-            Already have an account?{' '}
-            <Text
-              style={styles.signin}
-              onPress={() => navigation.navigate('Login')}
-            >
-              Login
-            </Text>
+            Login
           </Text>
-        </View>
-        <View style={{ height: 100 }} />
-      </KeyboardAvoidingView>
-    </ImageBackground>
+        </Text>
+      </View>
+      <View style={{ height: 100 }} />
+    </KeyboardAvoidingView>
   );
 };
 

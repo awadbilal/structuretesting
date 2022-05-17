@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
 import Logo from '../../Assets/logo.png';
-import Background from '../../Assets/BackgroundappBackground.png';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, setUser }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -21,106 +21,108 @@ const Login = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
-    // Handle Login Functionality
+    setIsLoading(true);
+    // Handle sign-in in here
+    signInWithEmailAndPassword(auth, formData.email, formData.password)
+      .then((userCredentials) => {
+        setUser(userCredentials.user);
+        setIsLoading(false);
+        navigation.replace('Home');
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        alert(err.message);
+      });
   };
 
   return (
-    <ImageBackground
-      source={Background}
-      style={{ width: '100%', height: '100%' }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.container}>
-          <Image source={Logo} style={styles.logo} />
-          <Text style={styles.title}>Continue Progressing</Text>
-          <Text style={[styles.subText, { marginBottom: 30 }]}>
-            Log in to your account
-          </Text>
-          <Text style={styles.text}>Email</Text>
-          <Input
-            placeholder="John.doe@gmail.com"
-            type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            style={{ color: '#FFF' }}
-            inputContainerStyle={[styles.input]}
-            leftIcon={
-              <EmailIcon
-                name="email-check-outline"
-                color="#00F0FF"
-                style={{ marginRight: 20, fontSize: 22 }}
-              />
-            }
-          />
-          <Text style={styles.text}>Password</Text>
-          <Input
-            placeholder="******************"
-            secureTextEntry
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            style={{ color: '#FFF' }}
-            inputContainerStyle={[styles.input]}
-            leftIcon={
-              <PasswordIcon
-                name="key"
-                color="#00F0FF"
-                style={{ marginRight: 20, fontSize: 22 }}
-              />
-            }
-          />
-          {isLoading ? (
-            <Button
-              type="solid"
-              color="#3D1273"
-              radius="16"
-              buttonStyle={{ backgroundColor: '#3D1273' }}
-              containerStyle={styles.button}
-              loading
+      <View style={styles.container}>
+        <Image source={Logo} style={styles.logo} />
+        <Text style={styles.title}>Continue Progressing</Text>
+        <Text style={[styles.subText, { marginBottom: 30 }]}>
+          Log in to your account
+        </Text>
+        <Text style={styles.text}>Email</Text>
+        <Input
+          placeholder='John.doe@gmail.com'
+          type='email'
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          style={{ color: '#FFF' }}
+          inputContainerStyle={[styles.input]}
+          leftIcon={
+            <EmailIcon
+              name='email-check-outline'
+              color='#00F0FF'
+              style={{ marginRight: 20, fontSize: 22 }}
             />
-          ) : (
-            <Button
-              type="solid"
-              radius="16"
-              title="Log in"
-              buttonStyle={{ backgroundColor: '#3D1273' }}
-              containerStyle={styles.button}
-              onPress={handleClick}
+          }
+        />
+        <Text style={styles.text}>Password</Text>
+        <Input
+          placeholder='******************'
+          secureTextEntry
+          type='password'
+          value={formData.password}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
+          style={{ color: '#FFF' }}
+          inputContainerStyle={[styles.input]}
+          leftIcon={
+            <PasswordIcon
+              name='key'
+              color='#00F0FF'
+              style={{ marginRight: 20, fontSize: 22 }}
             />
-          )}
-          <Text
-            style={[styles.subText, { marginTop: 14, alignSelf: 'center' }]}
-          >
-            Forgot your password?{' '}
-            <Text
-              style={styles.signup}
-              onPress={() => navigation.navigate('ResetPassword')}
-            >
-              Reset now
-            </Text>
-          </Text>
-          <Text
-            style={[styles.subText, { marginVertical: 6, alignSelf: 'center' }]}
-          >
-            or
-          </Text>
+          }
+        />
+        {isLoading ? (
+          <Button
+            type='solid'
+            color='#3D1273'
+            radius='16'
+            buttonStyle={{ backgroundColor: '#3D1273' }}
+            containerStyle={styles.button}
+            loading
+          />
+        ) : (
+          <Button
+            type='solid'
+            radius='16'
+            title='Log in'
+            buttonStyle={{ backgroundColor: '#3D1273' }}
+            containerStyle={styles.button}
+            onPress={handleClick}
+          />
+        )}
+        <Text style={[styles.subText, { marginTop: 14, alignSelf: 'center' }]}>
+          Forgot your password?{' '}
           <Text
             style={styles.signup}
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate('Reset')}
           >
-            Register
+            Reset now
           </Text>
-        </View>
-        <View style={{ height: 100 }} />
-      </KeyboardAvoidingView>
-    </ImageBackground>
+        </Text>
+        <Text
+          style={[styles.subText, { marginVertical: 6, alignSelf: 'center' }]}
+        >
+          or
+        </Text>
+        <Text
+          style={styles.signup}
+          onPress={() => navigation.navigate('Register')}
+        >
+          Register
+        </Text>
+      </View>
+      <View style={{ height: 100 }} />
+    </KeyboardAvoidingView>
   );
 };
 

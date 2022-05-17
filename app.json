@@ -1,12 +1,18 @@
 {
   "expo": {
-    "name": "structuretesting",
-    "slug": "structuretesting",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "description": "",
+   "name": "Structure Tester",
+   "icon": "./Assets/logo.png",
+   "version": "1.0.0",
+   "slug": "structuretesting",
+   "ios": {
+     "bundleIdentifier": "com.cmpcapstone.structuretester",
+     "buildNumber": "1.0.1"
+   },
+   "android": {
+     "package": "com.cmpcapstone.structuretester",
+     "versionCode": 2
+   },
+   "description": "",
     "githubUrl": "https://github.com/awadbilal/structuretesting"
   }
 }

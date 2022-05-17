@@ -1,6 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, ImageBackground } from 'react-native';
-import Background from '../../Assets/BackgroundappBackground.png';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Logo from '../../Assets/logo.png';
 import Intro1 from '../../Assets/intro1.png';
 import Intro2 from '../../Assets/intro2.png';
@@ -8,9 +7,9 @@ import Intro3 from '../../Assets/intro3.png';
 
 import CustomCarousel from './CustomCarousel';
 
-DATA = [
+const DATA = [
   {
-    title: 'Project Title',
+    title: 'Structure Testing',
     subTitle: 'Welcome to',
     sentence:
       'Where earthquake resistance testing just became easier and more accurate!',
@@ -39,16 +38,15 @@ DATA = [
   },
 ];
 
-const Introduction = ({ intro, setIntro }) => {
+const Introduction = ({ navigation, intro, user, setIntro }) => {
+  useEffect(() => {
+    navigation.replace('Home');
+  }, [user]);
+
   return (
-    <ImageBackground
-      source={Background}
-      style={{ width: '100%', height: '100%' }}
-    >
-      <View style={styles.container}>
-        <CustomCarousel data={DATA} intro={intro} setIntro={setIntro} />
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      <CustomCarousel data={DATA} intro={intro} setIntro={setIntro} />
+    </View>
   );
 };
 

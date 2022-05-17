@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import Background from './Assets/appBackground.png';
 import { StatusBar } from 'expo-status-bar';
+import './firebase';
 
 // Main Components
 import Home from './Components/HomePage/Home';
@@ -19,14 +21,27 @@ import Introduction from './Components/Introduction/Introduction';
 import Register from './Components/User/Register';
 import EmailRegister from './Components/User/EmailRegister';
 import Login from './Components/User/Login';
+import ResetPassword from './Components/User/ResetPassword';
+import { ImageBackground } from 'react-native-web';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState(false);
+  const [user, setUser] = React.useState(true);
   const [intro, setIntro] = React.useState(false);
+
+  // NavigationContainer themes
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      border: 'rgba(61, 18, 115, 0.8)',
+      card: 'rgba(61, 18, 115, 1)',
+      background: 'transparent',
+    },
+  };
 
   // The BottomPanel is used for the navigation at the end of the screen
   const BottomPanel = () => {
@@ -53,28 +68,27 @@ const App = () => {
             else if (iconName === 'settings' || iconName === 'settings-outline')
               return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: '#3D1273',
-          tabBarInactiveTintColor: 'gray',
-          backgroundColor: 'blue',
+          tabBarActiveTintColor: '#2BB3E0',
+          tabBarInactiveTintColor: '#FFFFFF80',
         })}
       >
         <Tab.Screen
-          name="Home"
+          name='Home'
           options={{ headerShown: false }}
           component={Home}
         />
         <Tab.Screen
-          name="Projects"
+          name='Projects'
           options={{ headerShown: false }}
           component={Projects}
         />
         <Tab.Screen
-          name="Scan"
+          name='Scan'
           options={{ headerShown: false }}
           component={Scan}
         />
         <Tab.Screen
-          name="Settings"
+          name='Settings'
           options={{ headerShown: false }}
           component={Settings}
         />
@@ -84,40 +98,55 @@ const App = () => {
 
   // INTRO contains all the navigation for the introduction pages.
   const INTRO = [
-    <Stack.Screen name="Introduction">
-      {(props) => <Introduction {...props} intro={intro} setIntro={setIntro} />}
+    <Stack.Screen name='Introduction'>
+      {(props) => (
+        <Introduction
+          {...props}
+          intro={intro}
+          user={user}
+          setIntro={setIntro}
+        />
+      )}
     </Stack.Screen>,
   ];
 
   // CREDENTIALS contains all the navigation for user credentials pages.
   const CREDENTIALS = [
-    <Stack.Screen name="Register">
-      {(props) => <Register {...props} setUser={setUser} />}
+    <Stack.Screen name='Register'>
+      {(props) => <Register {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name="Login">
-      {(props) => <Login {...props} setUser={setUser} />}
+    <Stack.Screen name='Login'>
+      {(props) => <Login {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name="EmailRegister">
-      {(props) => <EmailRegister {...props} setUser={setUser} />}
+    <Stack.Screen name='EmailRegister'>
+      {(props) => <EmailRegister {...props} user={user} setUser={setUser} />}
+    </Stack.Screen>,
+    <Stack.Screen name='Reset'>
+      {(props) => <ResetPassword {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
   ];
 
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user && (
-          <Stack.Screen
-            name="BottomPanel"
-            component={BottomPanel}
-            options={{ headerShown: false }}
-          />
-        )}
-        {intro && [...CREDENTIALS]}
-        {!intro && !user && [...INTRO]}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ImageBackground source={Background} style={{ flex: 1 }}>
+      <NavigationContainer theme={MyTheme}>
+        <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {user && (
+            <Stack.Screen
+              name='BottomPanel'
+              component={BottomPanel}
+              options={{ headerShown: false }}
+            />
+          )}
+          {intro && !user && [...CREDENTIALS]}
+          {!intro && !user && [...INTRO]}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ImageBackground>
   );
 };
 
 export default App;
+
+// The following line is to disable all warnings (Keys, depreciated packages, etc...)
+console.disableYellowBox = true;
