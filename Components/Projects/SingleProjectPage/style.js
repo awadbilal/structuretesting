@@ -57,9 +57,7 @@ export const styles = StyleSheet.create({
   devices: {
     fontWeight: '700',
     fontSize: 24,
-    lineHeight: 20,
     color: '#FEFEFE',
-    alignSelf: 'start',
     marginBottom: 30,
   },
   devicesContainer: {
@@ -110,7 +108,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 14,
     backgroundColor: '#3D1273',
     borderRadius: 16,
-    alignSelf: 'center',
     textAlign: 'left',
     marginTop: 20,
   },

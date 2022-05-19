@@ -27,6 +27,7 @@ import ResetPassword from './User/ResetPassword/ResetPassword';
 
 // Projects area
 import SingleProject from './Projects/SingleProjectPage/SingleProject';
+import SingleProjectPart2 from './Projects/SingleProjectPart2/SingleProjectPart2';
 import CreateProject from './Projects/CreateProject/CreateProject';
 
 const Stack = createNativeStackNavigator();
@@ -167,16 +168,16 @@ const Links = ({ navigation }) => {
   const PROJECTS = [
     projectsList?.map((item) => {
       return (
-        (
-          <Stack.Screen key={item?.id} name={`${item?.id}`}>
-            {(props) => <SingleProject {...props} item={item} />}
-          </Stack.Screen>
-        ),
-        (
-          <Stack.Screen key={item?.id} name={`${item?.id}`}>
-            {(props) => <SingleProjectPart2 {...props} item={item} />}
-          </Stack.Screen>
-        )
+        <Stack.Screen key={item?.id} name={`${item?.id}`}>
+          {(props) => <SingleProject {...props} item={item} />}
+        </Stack.Screen>
+      );
+    }),
+    projectsList?.map((item) => {
+      return (
+        <Stack.Screen key={`${item?.id}part2`} name={`${item?.id}part2`}>
+          {(props) => <SingleProjectPart2 {...props} item={item} />}
+        </Stack.Screen>
       );
     }),
     <Stack.Screen

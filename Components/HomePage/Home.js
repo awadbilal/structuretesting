@@ -40,10 +40,6 @@ const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
     wait(600).then(() => setRefreshing(false));
   }, []);
 
-  const handleClick = (item) => {
-    navigation.navigate(`${item}`);
-  };
-
   return (
     <ScrollView
       contentContainerStyle={styles.scrollView}
@@ -87,7 +83,7 @@ const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
             <TouchableOpacity
               style={styles.project}
               key={item.id}
-              onPress={() => handleClick(item.id)}
+              onPress={() => navigation.navigate(`${item.id}`)}
             >
               <Text style={styles.projectTitle}>{item.title}</Text>
               <Text style={styles.projectDate}>{item.date}</Text>
