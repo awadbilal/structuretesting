@@ -1,0 +1,103 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    padding: 20,
+    paddingHorizontal: 30,
+  },
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    alignItems: 'center',
+  },
+  title: {
+    color: '#FFFFFF',
+    fontSize: 30,
+    alignSelf: 'flex-start',
+    marginBottom: 20,
+  },
+  latestProject: {
+    width: '100%',
+    height: 200,
+    borderRadius: 16,
+    marginBottom: 15,
+  },
+  latestGradient: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    borderRadius: 16,
+  },
+  latestSub: {
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#FFFFFF',
+    position: 'absolute',
+    left: 30,
+    top: 30,
+  },
+  latestTitle: {
+    fontSize: 24,
+    lineHeight: 24,
+    color: '#FEFEFE',
+    position: 'absolute',
+    left: 30,
+    top: 60,
+  },
+  chartsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 30,
+  },
+  chartArea: {
+    width: 150,
+    height: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3D1273',
+    borderRadius: 16,
+    padding: 5,
+  },
+  chartImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  projectsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 16,
+  },
+  projectsHeader: {
+    fontSize: 24,
+    lineHeight: 24,
+    color: '#FEFEFE',
+  },
+  project: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 12,
+    padding: 20,
+    backgroundColor: '#2F3462',
+    borderRadius: 16,
+  },
+  projectTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#FEFEFE',
+  },
+  projectDate: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: '#F7F7F7',
+  },
+});

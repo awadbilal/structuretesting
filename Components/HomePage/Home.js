@@ -1,32 +1,44 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
-  StyleSheet,
   View,
   RefreshControl,
   ScrollView,
-  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
-import Constants from 'expo-constants';
+import ArrowRight from 'react-native-vector-icons/AntDesign';
+import { styles } from './style';
 import { Text } from 'react-native-elements';
-import { Card } from '@rneui/themed';
-import { PROJECTS } from '../data';
+import ImageGradient from '../../Assets/imageGradiant.png';
+import BackgroundImage from '../../Assets/testImage.png';
+import Chart1 from '../../Assets/chart1.png';
+import Chart2 from '../../Assets/chart2.png';
+import { Image } from '@rneui/themed';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { store } from '../../firebase';
 
-const Home = () => {
-  const [refreshing, setRefreshing] = useState(false);
-  const DATA = PROJECTS.sort((a, b) => {
-    let keyA = new Date(a.date),
-      keyB = new Date(b.date);
-    if (keyA < keyB) return -1;
-    else if (keyB < keyA) return 1;
-    else return 0;
-  });
+const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
+  const [url, setUrl] = React.useState();
 
+  const reader = new FileReader();
+
+  async function fetchImage() {
+    const reference = await ref(store, `/${projectsList[0]?.image}`);
+    await getDownloadURL(reference)
+      .then((data) => setUrl(data))
+      .catch((err) => console.log(err));
+  }
+
+  React.useEffect(() => {
+    fetchImage();
+  }, []);
+
+  // Refreshing the page by scrolling down
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    fetchData();
     wait(600).then(() => setRefreshing(false));
   }, []);
 
@@ -39,71 +51,46 @@ const Home = () => {
     >
       <View style={styles.container}>
         <Text style={styles.title}>Welcome Back!</Text>
-        <TouchableOpacity style={{ width: '100%', height: '210' }}>
-          <View style={styles.projectCard}>
-            <Text style={styles.subText}>Your Latest Project</Text>
-            <Text style={styles.projectTitle}>{DATA[0].title}</Text>
+        <View style={styles.latestProject}>
+          <ImageBackground
+            source={{ uri: url }}
+            style={styles.latestGradient}
+          />
+          <ImageBackground
+            source={ImageGradient}
+            style={styles.latestGradient}
+          />
+          <Text style={styles.latestSub}>Your Latest Project</Text>
+          <Text style={styles.latestTitle}>{projectsList[0]?.title}</Text>
+        </View>
+        <View style={styles.chartsContainer}>
+          <View style={styles.chartArea}>
+            <Image source={Chart1} containerStyle={styles.chartImage} />
           </View>
-        </TouchableOpacity>
+          <View style={styles.chartArea}>
+            <Image source={Chart2} containerStyle={styles.chartImage} />
+          </View>
+        </View>
+        <View style={styles.projectsContainer}>
+          <Text style={styles.projectsHeader}>List of Projects</Text>
+          <ArrowRight
+            name='arrowright'
+            color='#FEFEFE'
+            size={20}
+            onPress={() => navigation.navigate('Projects')}
+          />
+        </View>
+        {projectsList?.map((item) => {
+          return (
+            <View style={styles.project} key={item.id}>
+              <Text style={styles.projectTitle}>{item.title}</Text>
+              <Text style={styles.projectDate}>{item.date}</Text>
+            </View>
+          );
+        })}
       </View>
     </ScrollView>
   );
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    padding: 20,
-  },
-  container: {
-    flex: 1,
-    paddingTop: Constants.statusBarHeight,
-    alignItems: 'center',
-  },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 30,
-    fontWeight: '500',
-    alignSelf: 'flex-start',
-  },
-  projectCard: {
-    width: '100%',
-    height: '100%',
-    border: 2,
-    borderColor: 'black',
-  },
-  projectTitle: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: '600',
-    position: 'absolute',
-    top: 60,
-    left: 30,
-  },
-  text: {
-    alignSelf: 'baseline',
-    color: '#FFF',
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 10,
-    marginLeft: 12,
-  },
-  subText: {
-    color: '#FFF',
-    fontWeight: '400',
-    fontSize: 14,
-    position: 'absolute',
-    top: 30,
-    left: 30,
-    alignSelf: 'flex-start',
-  },
-  buttons: {
-    width: '95%',
-    paddingVertical: 14,
-    backgroundColor: '#3D1273',
-    borderRadius: 16,
-    alignSelf: 'center',
-  },
-});

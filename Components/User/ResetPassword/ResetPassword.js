@@ -2,12 +2,12 @@ import { Text, View } from 'react-native';
 import React from 'react';
 import { styles } from './style';
 
-const Projects = () => {
+const ResetPassword = () => {
   return (
     <View>
-      <Text>Projects</Text>
+      <Text>ResetPassword</Text>
     </View>
   );
 };
 
-export default Projects;
+export default ResetPassword;

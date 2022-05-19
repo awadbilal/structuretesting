@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
+import { styles } from './style';
 
 const Scan = () => {
   return (
@@ -10,5 +11,3 @@ const Scan = () => {
 };
 
 export default Scan;
-
-const styles = StyleSheet.create({});

@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
+import { styles } from './style';
 
 const Settings = () => {
   return (
@@ -10,5 +11,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
-const styles = StyleSheet.create({});
