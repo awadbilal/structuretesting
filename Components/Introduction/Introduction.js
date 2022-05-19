@@ -40,7 +40,7 @@ const DATA = [
 
 const Introduction = ({ navigation, intro, user, setIntro }) => {
   useEffect(() => {
-    navigation.replace('Home');
+    navigation.navigate('Home');
   }, [user]);
 
   return (

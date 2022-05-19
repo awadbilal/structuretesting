@@ -5,13 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
+import { LogBox } from 'react-native';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import '../firebase';
 
 // Main Components
 import Home from './HomePage/Home';
-import Projects from './Projects/Projects';
+import Projects from './Projects/ProjectsList/Projects';
 import Scan from './Scan/Scan';
 import Settings from './Settings/Settings';
 
@@ -23,6 +24,10 @@ import Register from './User/Register/Register';
 import EmailRegister from './User/EmailRegister/EmailRegister';
 import Login from './User/Login/Login';
 import ResetPassword from './User/ResetPassword/ResetPassword';
+
+// Projects area
+import SingleProject from './Projects/SingleProjectPage/SingleProject';
+import CreateProject from './Projects/CreateProject/CreateProject';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,7 +110,14 @@ const Links = ({ navigation }) => {
           )}
         </Tab.Screen>
         <Tab.Screen name='Projects' options={{ headerShown: false }}>
-          {(props) => <Projects {...props} projectsList={projectsList} />}
+          {(props) => (
+            <Projects
+              {...props}
+              projectsList={projectsList}
+              refreshing={refreshing}
+              setRefreshing={setRefreshing}
+            />
+          )}
         </Tab.Screen>
         <Tab.Screen
           name='Scan'
@@ -151,6 +163,22 @@ const Links = ({ navigation }) => {
     </Stack.Screen>,
   ];
 
+  // Projects contains all the navigation for View, creating, and editing projects
+  const PROJECTS = [
+    projectsList?.map((item) => {
+      return (
+        <Stack.Screen key={item?.id} name={`${item?.id}`}>
+          {(props) => <SingleProject {...props} data={item} />}
+        </Stack.Screen>
+      );
+    }),
+    <Stack.Screen
+      name='CreateProject'
+      component={CreateProject}
+      options={{ headerShown: false }}
+    />,
+  ];
+
   return (
     <NavigationContainer theme={MyTheme}>
       <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
@@ -162,6 +190,7 @@ const Links = ({ navigation }) => {
             options={{ headerShown: false }}
           />
         )}
+        {user && PROJECTS}
         {intro && !user && [...CREDENTIALS]}
         {!intro && !user && [...INTRO]}
       </Stack.Navigator>
@@ -170,3 +199,5 @@ const Links = ({ navigation }) => {
 };
 
 export default Links;
+LogBox.disableYellowBox = true;
+console.disableYellowBox = true;

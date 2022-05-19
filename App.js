@@ -17,3 +17,4 @@ export default App;
 
 // The following line is to disable all warnings (Keys, depreciated packages, etc...)
 LogBox.disableYellowBox = true;
+console.disableYellowBox = true;

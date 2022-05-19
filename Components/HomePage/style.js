@@ -40,6 +40,7 @@ export const styles = StyleSheet.create({
   },
   latestTitle: {
     fontSize: 24,
+    fontWeight: '700',
     lineHeight: 24,
     color: '#FEFEFE',
     position: 'absolute',

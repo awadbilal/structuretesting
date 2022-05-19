@@ -1,25 +1,24 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import {
   View,
   RefreshControl,
   ScrollView,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import ArrowRight from 'react-native-vector-icons/AntDesign';
-import { styles } from './style';
 import { Text } from 'react-native-elements';
 import ImageGradient from '../../Assets/imageGradiant.png';
-import BackgroundImage from '../../Assets/testImage.png';
 import Chart1 from '../../Assets/chart1.png';
 import Chart2 from '../../Assets/chart2.png';
 import { Image } from '@rneui/themed';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { store } from '../../firebase';
+import { styles } from './style';
 
 const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
+  // Fetching the image for the project
   const [url, setUrl] = React.useState();
-
-  const reader = new FileReader();
 
   async function fetchImage() {
     const reference = await ref(store, `/${projectsList[0]?.image}`);
@@ -36,11 +35,14 @@ const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
-  const onRefresh = useCallback(() => {
+  const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchData();
     wait(600).then(() => setRefreshing(false));
   }, []);
+
+  const handleClick = (item) => {
+    navigation.navigate(`${item}`);
+  };
 
   return (
     <ScrollView
@@ -82,10 +84,14 @@ const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
         </View>
         {projectsList?.map((item) => {
           return (
-            <View style={styles.project} key={item.id}>
+            <TouchableOpacity
+              style={styles.project}
+              key={item.id}
+              onPress={() => handleClick(item.id)}
+            >
               <Text style={styles.projectTitle}>{item.title}</Text>
               <Text style={styles.projectDate}>{item.date}</Text>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>

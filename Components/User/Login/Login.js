@@ -15,6 +15,7 @@ const Login = ({ navigation, setUser }) => {
 
   const handleClick = () => {
     // Handle Login functionality
+    setUser(true);
   };
 
   return (

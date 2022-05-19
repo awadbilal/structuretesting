@@ -16,15 +16,15 @@ const EmailRegister = ({ navigation, setUser }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) navigation.replace('Home');
-    });
-
-    return unsubscribe;
+    // const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+    //   if (authUser) navigation.navigate('Home');
+    // });
+    // return unsubscribe;
   }, []);
 
   async function handleClick() {
     // Handle Sign Up then saving the user onto firestore functionality
+    setUser(true);
   }
 
   return (
