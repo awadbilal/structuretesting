@@ -34,7 +34,7 @@ const Tab = createBottomTabNavigator();
 
 const Links = ({ navigation }) => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState(true);
+  const [user, setUser] = React.useState(false);
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
