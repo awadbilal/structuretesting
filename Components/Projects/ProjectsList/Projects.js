@@ -7,9 +7,6 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input, Text } from 'react-native-elements';
-import { Image } from '@rneui/themed';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { store } from '../../../firebase';
 import { styles } from './style';
 
 const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
@@ -17,7 +14,7 @@ const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
   const [projects, setProjects] = React.useState(projectsList);
 
   useEffect(() => {
-    setProjects(projectsList.filter((item) => item?.title?.includes(search)));
+    setProjects(projectsList?.filter((item) => item?.title?.includes(search)));
   }, [search]);
 
   // For refreshing the page by swiping down
@@ -70,11 +67,17 @@ const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
           return (
             <TouchableOpacity
               style={styles.project}
-              key={item.id}
-              onPress={() => handleClick(item.id)}
+              key={item?.id}
+              onPress={() => handleClick(item?.id)}
             >
-              <Text style={styles.projectTitle}>{item.title}</Text>
-              <Text style={styles.projectDate}>{item.date}</Text>
+              <Text style={styles.projectTitle}>{item?.title}</Text>
+              <Text style={styles.projectNumbers}>
+                {item?.levels?.length} Levels
+              </Text>
+              <Text style={styles.projectDate}>{item?.date}</Text>
+              <Text style={styles.projectNumbers}>
+                {item?.users?.length} Devices
+              </Text>
             </TouchableOpacity>
           );
         })}

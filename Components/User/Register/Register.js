@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Image } from 'react-native-elements';
-import { styles } from './style';
 import Logo from '../../../Assets/logo.png';
 import GoogleIcon from 'react-native-vector-icons/FontAwesome';
 import FacebookIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { styles } from './style';
 
 const Register = ({ navigation, setUser }) => {
   const handleGoogle = () => {

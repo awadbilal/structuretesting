@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
-import { styles } from './style';
 import Logo from '../../../Assets/logo.png';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { styles } from './style';
 
 const Login = ({ navigation, setUser }) => {
   const [formData, setFormData] = useState({

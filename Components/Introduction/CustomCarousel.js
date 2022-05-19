@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './style';
 import Carousel from 'react-native-snap-carousel';
 import CustomPaging from './CustomPaging';
+import { styles } from './style';
 
 export default class CustomCarousel extends React.Component {
   constructor(props) {

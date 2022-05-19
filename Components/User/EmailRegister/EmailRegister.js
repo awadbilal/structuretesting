@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
-import { styles } from './style';
 import Logo from '../../../Assets/logo.png';
 import UserIcon from 'react-native-vector-icons/AntDesign';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { styles } from './style';
 
 const EmailRegister = ({ navigation, setUser }) => {
   const [formData, setFormData] = useState({
@@ -14,13 +14,6 @@ const EmailRegister = ({ navigation, setUser }) => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    // const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-    //   if (authUser) navigation.navigate('Home');
-    // });
-    // return unsubscribe;
-  }, []);
 
   async function handleClick() {
     // Handle Sign Up then saving the user onto firestore functionality

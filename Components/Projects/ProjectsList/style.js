@@ -35,7 +35,8 @@ export const styles = StyleSheet.create({
   project: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
     width: '100%',
     marginBottom: 12,
     padding: 20,
@@ -47,10 +48,19 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: '#FEFEFE',
+    width: '50%',
   },
   projectDate: {
     fontSize: 13,
     lineHeight: 20,
     color: '#F7F7F7',
+    width: '50%',
+  },
+  projectNumbers: {
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#00A7FF',
+    width: '50%',
+    textAlign: 'right',
   },
 });

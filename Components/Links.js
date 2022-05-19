@@ -190,7 +190,7 @@ const Links = ({ navigation }) => {
             options={{ headerShown: false }}
           />
         )}
-        {user && PROJECTS}
+        {user && [...PROJECTS]}
         {intro && !user && [...CREDENTIALS]}
         {!intro && !user && [...INTRO]}
       </Stack.Navigator>
