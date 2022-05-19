@@ -167,9 +167,16 @@ const Links = ({ navigation }) => {
   const PROJECTS = [
     projectsList?.map((item) => {
       return (
-        <Stack.Screen key={item?.id} name={`${item?.id}`}>
-          {(props) => <SingleProject {...props} data={item} />}
-        </Stack.Screen>
+        (
+          <Stack.Screen key={item?.id} name={`${item?.id}`}>
+            {(props) => <SingleProject {...props} item={item} />}
+          </Stack.Screen>
+        ),
+        (
+          <Stack.Screen key={item?.id} name={`${item?.id}`}>
+            {(props) => <SingleProjectPart2 {...props} item={item} />}
+          </Stack.Screen>
+        )
       );
     }),
     <Stack.Screen
