@@ -6,16 +6,38 @@ import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
 import { styles } from './style';
 
-const Login = ({ navigation, setUser }) => {
+const Login = ({ navigation, usersList, setUser }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     // Handle Login functionality
-    setUser(true);
+    setIsLoading(true);
+
+    const filteredData = await usersList.filter(
+      (user) => user?.email?.toLowerCase() === formData?.email?.toLowerCase()
+    );
+    if (filteredData?.length > 0) {
+      if (filteredData[0]?.password === formData?.password) {
+        await setUser(filteredData[0]);
+      } else {
+        setFormData({
+          ...formData,
+          password: '',
+        });
+        alert('Incorrect password has been entered');
+      }
+    } else {
+      setFormData({
+        email: '',
+        password: '',
+      });
+      alert('This email has not been registered yet.');
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -31,25 +53,25 @@ const Login = ({ navigation, setUser }) => {
         </Text>
         <Text style={styles.text}>Email</Text>
         <Input
-          placeholder='John.doe@gmail.com'
-          type='email'
+          placeholder="John.doe@gmail.com"
+          type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={
             <EmailIcon
-              name='email-check-outline'
-              color='#00F0FF'
+              name="email-check-outline"
+              color="#00F0FF"
               style={{ marginRight: 20, fontSize: 22 }}
             />
           }
         />
         <Text style={styles.text}>Password</Text>
         <Input
-          placeholder='******************'
+          placeholder="******************"
           secureTextEntry
-          type='password'
+          type="password"
           value={formData.password}
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
@@ -58,26 +80,26 @@ const Login = ({ navigation, setUser }) => {
           inputContainerStyle={[styles.input]}
           leftIcon={
             <PasswordIcon
-              name='key'
-              color='#00F0FF'
+              name="key"
+              color="#00F0FF"
               style={{ marginRight: 20, fontSize: 22 }}
             />
           }
         />
         {isLoading ? (
           <Button
-            type='solid'
-            color='#3D1273'
-            radius='16'
+            type="solid"
+            color="#3D1273"
+            radius="16"
             buttonStyle={{ backgroundColor: '#3D1273' }}
             containerStyle={styles.button}
             loading
           />
         ) : (
           <Button
-            type='solid'
-            radius='16'
-            title='Log in'
+            type="solid"
+            radius="16"
+            title="Log in"
             buttonStyle={{ backgroundColor: '#3D1273' }}
             containerStyle={styles.button}
             onPress={handleClick}

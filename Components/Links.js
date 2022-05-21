@@ -38,13 +38,16 @@ const Links = ({ navigation }) => {
   const [user, setUser] = React.useState(false);
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
+  const [usersList, setUsersList] = React.useState([]);
+  console.log('🚀 ~ file: Links.js ~ line 42 ~ Links ~ usersList', usersList);
   const [refreshing, setRefreshing] = React.useState(false);
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
-    const querySnapshot = await getDocs(collection(db, 'projects'));
+    // Fetching Projects List
+    const projectsSnapshot = await getDocs(collection(db, 'projects'));
     const newArr = [];
-    await querySnapshot?.forEach((doc) => {
+    await projectsSnapshot?.forEach((doc) => {
       newArr.push({ id: doc.id, ...doc.data() });
     });
     newArr.sort((a, b) => {
@@ -55,6 +58,12 @@ const Links = ({ navigation }) => {
       else return 0;
     });
     await setProjectsList(newArr);
+
+    // Fetching Users List
+    const usersSnapshot = await getDocs(collection(db, 'users'));
+    await usersSnapshot?.forEach((doc) => {
+      setUsersList([...usersList, { id: doc.id, ...doc.data() }]);
+    });
   }
 
   React.useEffect(() => {
@@ -100,7 +109,7 @@ const Links = ({ navigation }) => {
           tabBarInactiveTintColor: '#FFFFFF80',
         })}
       >
-        <Tab.Screen name='Home' options={{ headerShown: false }}>
+        <Tab.Screen name="Home" options={{ headerShown: false }}>
           {(props) => (
             <Home
               {...props}
@@ -110,7 +119,7 @@ const Links = ({ navigation }) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Projects' options={{ headerShown: false }}>
+        <Tab.Screen name="Projects" options={{ headerShown: false }}>
           {(props) => (
             <Projects
               {...props}
@@ -121,12 +130,12 @@ const Links = ({ navigation }) => {
           )}
         </Tab.Screen>
         <Tab.Screen
-          name='Scan'
+          name="Scan"
           options={{ headerShown: false }}
           component={Scan}
         />
         <Tab.Screen
-          name='Settings'
+          name="Settings"
           options={{ headerShown: false }}
           component={Settings}
         />
@@ -136,7 +145,7 @@ const Links = ({ navigation }) => {
 
   // INTRO contains all the navigation for the introduction pages.
   const INTRO = [
-    <Stack.Screen name='Introduction'>
+    <Stack.Screen name="Introduction">
       {(props) => (
         <Introduction
           {...props}
@@ -150,16 +159,18 @@ const Links = ({ navigation }) => {
 
   // CREDENTIALS contains all the navigation for user credentials pages.
   const CREDENTIALS = [
-    <Stack.Screen name='Register'>
-      {(props) => <Register {...props} user={user} setUser={setUser} />}
+    <Stack.Screen name="Register">
+      {(props) => <Register {...props} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='Login'>
-      {(props) => <Login {...props} user={user} setUser={setUser} />}
+    <Stack.Screen name="Login">
+      {(props) => <Login {...props} usersList={usersList} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='EmailRegister'>
-      {(props) => <EmailRegister {...props} user={user} setUser={setUser} />}
+    <Stack.Screen name="EmailRegister">
+      {(props) => (
+        <EmailRegister {...props} usersList={usersList} setUser={setUser} />
+      )}
     </Stack.Screen>,
-    <Stack.Screen name='Reset'>
+    <Stack.Screen name="Reset">
       {(props) => <ResetPassword {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
   ];
@@ -181,7 +192,7 @@ const Links = ({ navigation }) => {
       );
     }),
     <Stack.Screen
-      name='CreateProject'
+      name="CreateProject"
       component={CreateProject}
       options={{ headerShown: false }}
     />,
@@ -189,11 +200,11 @@ const Links = ({ navigation }) => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
+      <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user && (
           <Stack.Screen
-            name='BottomPanel'
+            name="BottomPanel"
             component={BottomPanel}
             options={{ headerShown: false }}
           />
