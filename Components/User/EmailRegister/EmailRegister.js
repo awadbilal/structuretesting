@@ -17,6 +17,19 @@ const EmailRegister = ({ navigation, setUser }) => {
 
   async function handleClick() {
     // Handle Sign Up then saving the user onto firestore functionality
+    setIsLoading(true);
+
+    try {
+      const docRef = await addDoc(collection(db, 'users'), formData);
+      await setUser({
+        ...formData,
+        id: docRef.id,
+      });
+    } catch (e) {
+      alert(e);
+    }
+
+    setIsLoading(false);
     setUser(true);
   }
 
