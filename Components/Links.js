@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
-import { LogBox } from 'react-native';
+import { AsyncStorage, LogBox, Platform } from 'react-native';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import '../firebase';
@@ -35,11 +35,9 @@ const Tab = createBottomTabNavigator();
 
 const Links = ({ navigation }) => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState(false);
+  const [user, setUser] = React.useState(Platform.OS === "web" ? JSON.parse(localStorage.getItem('user')) : AsyncStorage.getItem('user'));
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
-  const [usersList, setUsersList] = React.useState([]);
-  console.log('🚀 ~ file: Links.js ~ line 42 ~ Links ~ usersList', usersList);
   const [refreshing, setRefreshing] = React.useState(false);
 
   // Fetching and sorting data from Firestore
@@ -48,7 +46,11 @@ const Links = ({ navigation }) => {
     const projectsSnapshot = await getDocs(collection(db, 'projects'));
     const newArr = [];
     await projectsSnapshot?.forEach((doc) => {
-      newArr.push({ id: doc.id, ...doc.data() });
+      if(user){
+        user?.projects?.forEach((pr) => {
+          pr === doc?.id && newArr.push({ id: doc.id, ...doc.data() });
+        });
+      }
     });
     newArr.sort((a, b) => {
       let keyA = new Date(a.date),
@@ -58,17 +60,11 @@ const Links = ({ navigation }) => {
       else return 0;
     });
     await setProjectsList(newArr);
-
-    // Fetching Users List
-    const usersSnapshot = await getDocs(collection(db, 'users'));
-    await usersSnapshot?.forEach((doc) => {
-      setUsersList([...usersList, { id: doc.id, ...doc.data() }]);
-    });
   }
 
   React.useEffect(() => {
     fetchData();
-  }, [refreshing]);
+  }, [refreshing, user]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -109,33 +105,35 @@ const Links = ({ navigation }) => {
           tabBarInactiveTintColor: '#FFFFFF80',
         })}
       >
-        <Tab.Screen name="Home" options={{ headerShown: false }}>
+        <Tab.Screen name='Home' options={{ headerShown: false }}>
           {(props) => (
             <Home
               {...props}
-              projectsList={projectsList.slice(0, 10)}
+              data={projectsList.slice(0, 10)}
+              user={user}
               refreshing={refreshing}
               setRefreshing={setRefreshing}
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name="Projects" options={{ headerShown: false }}>
+        <Tab.Screen name='Projects' options={{ headerShown: false }}>
           {(props) => (
             <Projects
               {...props}
-              projectsList={projectsList}
+              data={projectsList}
+              user={user}
               refreshing={refreshing}
               setRefreshing={setRefreshing}
             />
           )}
         </Tab.Screen>
         <Tab.Screen
-          name="Scan"
+          name='Scan'
           options={{ headerShown: false }}
           component={Scan}
         />
         <Tab.Screen
-          name="Settings"
+          name='Settings'
           options={{ headerShown: false }}
           component={Settings}
         />
@@ -145,7 +143,7 @@ const Links = ({ navigation }) => {
 
   // INTRO contains all the navigation for the introduction pages.
   const INTRO = [
-    <Stack.Screen name="Introduction">
+    <Stack.Screen name='Introduction'>
       {(props) => (
         <Introduction
           {...props}
@@ -159,18 +157,18 @@ const Links = ({ navigation }) => {
 
   // CREDENTIALS contains all the navigation for user credentials pages.
   const CREDENTIALS = [
-    <Stack.Screen name="Register">
-      {(props) => <Register {...props} setUser={setUser} />}
-    </Stack.Screen>,
-    <Stack.Screen name="Login">
-      {(props) => <Login {...props} usersList={usersList} setUser={setUser} />}
-    </Stack.Screen>,
-    <Stack.Screen name="EmailRegister">
+    // <Stack.Screen name='Register'>
+    //   {(props) => <Register {...props} setUser={setUser} />}
+    // </Stack.Screen>,
+    <Stack.Screen name='Register'>
       {(props) => (
-        <EmailRegister {...props} usersList={usersList} setUser={setUser} />
+        <EmailRegister {...props} setUser={setUser} />
       )}
     </Stack.Screen>,
-    <Stack.Screen name="Reset">
+    <Stack.Screen name='Login'>
+      {(props) => <Login {...props} setUser={setUser} />}
+    </Stack.Screen>,
+    <Stack.Screen name='Reset'>
       {(props) => <ResetPassword {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
   ];
@@ -179,7 +177,7 @@ const Links = ({ navigation }) => {
   const PROJECTS = [
     projectsList?.map((item) => {
       return (
-        <Stack.Screen key={item?.id} name={`${item?.id}`}>
+        <Stack.Screen key={`${item?.id}part1`} name={`${item?.id}`}>
           {(props) => <SingleProject {...props} item={item} />}
         </Stack.Screen>
       );
@@ -192,7 +190,7 @@ const Links = ({ navigation }) => {
       );
     }),
     <Stack.Screen
-      name="CreateProject"
+      name='CreateProject'
       component={CreateProject}
       options={{ headerShown: false }}
     />,
@@ -200,11 +198,11 @@ const Links = ({ navigation }) => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
+      <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user && (
           <Stack.Screen
-            name="BottomPanel"
+            name='BottomPanel'
             component={BottomPanel}
             options={{ headerShown: false }}
           />

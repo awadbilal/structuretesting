@@ -16,7 +16,13 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { store } from '../../firebase';
 import { styles } from './style';
 
-const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
+const Home = ({ navigation, data, refreshing, setRefreshing }) => {
+  const [projectsList, setProjectsList] = React.useState(data);
+
+  async function editList() {
+    setProjectsList(projectsList);
+  }
+
   // Fetching the image for the project
   const [url, setUrl] = React.useState();
 
@@ -28,6 +34,7 @@ const Home = ({ navigation, projectsList, refreshing, setRefreshing }) => {
   }
 
   React.useEffect(() => {
+    editList();
     fetchImage();
   }, []);
 

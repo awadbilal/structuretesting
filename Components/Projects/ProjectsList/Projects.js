@@ -9,12 +9,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input, Text } from 'react-native-elements';
 import { styles } from './style';
 
-const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
+const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
   const [search, setSearch] = React.useState('');
-  const [projects, setProjects] = React.useState(projectsList);
+  const [projectsList, setProjectsList] = React.useState(data);
 
   useEffect(() => {
-    setProjects(projectsList?.filter((item) => item?.title?.includes(search)));
+    setProjectsList(data?.filter((item) => item?.title?.includes(search)));
   }, [search]);
 
   // For refreshing the page by swiping down
@@ -25,10 +25,6 @@ const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
     setRefreshing(true);
     wait(600).then(() => setRefreshing(false));
   }, []);
-
-  const handleClick = (item) => {
-    navigation.navigate(`${item}`);
-  };
 
   return (
     <ScrollView
@@ -63,12 +59,12 @@ const Projects = ({ navigation, projectsList, refreshing, setRefreshing }) => {
             />
           }
         />
-        {projects?.map((item) => {
+        {projectsList?.map((item) => {
           return (
             <TouchableOpacity
               style={styles.project}
               key={item?.id}
-              onPress={() => handleClick(item?.id)}
+              onPress={() => navigation.navigate(`${item.id}`)}
             >
               <Text style={styles.projectTitle}>{item?.title}</Text>
               <Text style={styles.projectNumbers}>

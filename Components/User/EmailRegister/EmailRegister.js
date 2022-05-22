@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, AsyncStorage } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
 import Logo from '../../../Assets/logo.png';
 import UserIcon from 'react-native-vector-icons/AntDesign';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { db } from '../../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import '../../../firebase';
 import { styles } from './style';
 
 const EmailRegister = ({ navigation, setUser }) => {
@@ -18,19 +21,24 @@ const EmailRegister = ({ navigation, setUser }) => {
   async function handleClick() {
     // Handle Sign Up then saving the user onto firestore functionality
     setIsLoading(true);
-
     try {
       const docRef = await addDoc(collection(db, 'users'), formData);
       await setUser({
         ...formData,
         id: docRef.id,
       });
+      Platform.OS === "web" ? await localStorage.setItem('user', JSON.stringify({
+        ...formData,
+        id: docRef.id,
+      })) : 
+      await AsyncStorage.setItem('user', JSON.stringify({
+        ...formData,
+        id: docRef.id,
+      }));
     } catch (e) {
       alert(e);
     }
-
     setIsLoading(false);
-    setUser(true);
   }
 
   return (

@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, KeyboardAvoidingView, Platform, AsyncStorage } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
 import Logo from '../../../Assets/logo.png';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PasswordIcon from 'react-native-vector-icons/Octicons';
+import { db } from '../../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import '../../../firebase';
 import { styles } from './style';
 
-const Login = ({ navigation, usersList, setUser }) => {
+const Login = ({ navigation, setUser }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [usersList, setUsersList] = useState([]);
 
+  // Fetching Users List
+  const fetchUsers = async () => {
+    const usersSnapshot = await getDocs(collection(db, 'users'));
+    const newUserArr = [];
+    await usersSnapshot?.forEach((doc) => {
+      newUserArr.push({ id: doc.id, ...doc.data() });
+    });
+    await setUsersList(newUserArr);
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, [])
+  
   const handleClick = async () => {
-    // Handle Login functionality
     setIsLoading(true);
-
     const filteredData = await usersList.filter(
       (user) => user?.email?.toLowerCase() === formData?.email?.toLowerCase()
     );
     if (filteredData?.length > 0) {
       if (filteredData[0]?.password === formData?.password) {
         await setUser(filteredData[0]);
+        Platform.OS === "web" ? await localStorage.setItem('user', JSON.stringify(filteredData[0])) : 
+        await AsyncStorage.setItem('user', JSON.stringify(filteredData[0]));
       } else {
         setFormData({
           ...formData,

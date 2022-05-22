@@ -27,10 +27,6 @@ const SingleProject = ({ navigation, item }) => {
     });
   }
 
-  const handleInvite = () => {
-    // A function to hanlde
-  };
-
   useEffect(() => {
     handleUsers();
   }, [users]);
@@ -88,19 +84,19 @@ const SingleProject = ({ navigation, item }) => {
       <View style={styles.devicesContainer}>
         <View style={styles.devicesInnerContainer}>
           <Text style={styles.devicesNumber}>1</Text>
-          <Text style={styles.devicesUser}>{item?.admin}</Text>
+          <Text style={styles.devicesUser}>{item?.admin?.name}</Text>
           <MaterialCommunityIcons name='crown' style={styles.devicesRemove} />
         </View>
         {users
-          ?.filter((usr) => usr !== item?.admin)
+          ?.filter((usr) => usr !== item?.admin?.id)
           .map((usr, i) => {
             return (
               <View style={styles.devicesInnerContainer} key={i}>
                 <Text style={styles.devicesNumber}>{i + 2}</Text>
-                <Text style={styles.devicesUser}>{usr}</Text>
+                <Text style={styles.devicesUser}>{usr?.name}</Text>
                 <Text
                   style={styles.devicesRemove}
-                  onPress={() => setUsers(users.filter((id) => id !== usr))}
+                  onPress={() => setUsers(users.filter((id) => id?.id !== usr?.id))}
                 >
                   X
                 </Text>
@@ -108,23 +104,6 @@ const SingleProject = ({ navigation, item }) => {
             );
           })}
       </View>
-      <Button
-        type='solid'
-        radius='16'
-        title='Invite Others'
-        iconRight={true}
-        icon={
-          <MaterialCommunityIcons
-            name='link-variant'
-            size={25}
-            color='#FEFEFE'
-          />
-        }
-        titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
-        buttonStyle={{ backgroundColor: '#3D1273' }}
-        containerStyle={styles.inviteAndContinue}
-        onPress={handleInvite}
-      />
       <Button
         type='solid'
         radius='16'
