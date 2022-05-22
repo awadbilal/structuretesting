@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, AsyncStorage } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
 import Logo from '../../../Assets/logo.png';
 import EmailIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,22 +25,20 @@ const Login = ({ navigation, setUser }) => {
       newUserArr.push({ id: doc.id, ...doc.data() });
     });
     await setUsersList(newUserArr);
-  }
+  };
 
   useEffect(() => {
     fetchUsers();
-  }, [])
-  
+  }, []);
+
   const handleClick = async () => {
     setIsLoading(true);
-    const filteredData = await usersList.filter(
-      (user) => user?.email?.toLowerCase() === formData?.email?.toLowerCase()
+    const filteredData = await usersList?.filter(
+      (user) => user?.email.toLowerCase() === formData?.email.toLowerCase()
     );
     if (filteredData?.length > 0) {
       if (filteredData[0]?.password === formData?.password) {
         await setUser(filteredData[0]);
-        Platform.OS === "web" ? await localStorage.setItem('user', JSON.stringify(filteredData[0])) : 
-        await AsyncStorage.setItem('user', JSON.stringify(filteredData[0]));
       } else {
         setFormData({
           ...formData,
@@ -71,25 +69,25 @@ const Login = ({ navigation, setUser }) => {
         </Text>
         <Text style={styles.text}>Email</Text>
         <Input
-          placeholder="John.doe@gmail.com"
-          type="email"
+          placeholder='John.doe@gmail.com'
+          type='email'
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={
             <EmailIcon
-              name="email-check-outline"
-              color="#00F0FF"
+              name='email-check-outline'
+              color='#00F0FF'
               style={{ marginRight: 20, fontSize: 22 }}
             />
           }
         />
         <Text style={styles.text}>Password</Text>
         <Input
-          placeholder="******************"
+          placeholder='******************'
           secureTextEntry
-          type="password"
+          type='password'
           value={formData.password}
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
@@ -98,26 +96,26 @@ const Login = ({ navigation, setUser }) => {
           inputContainerStyle={[styles.input]}
           leftIcon={
             <PasswordIcon
-              name="key"
-              color="#00F0FF"
+              name='key'
+              color='#00F0FF'
               style={{ marginRight: 20, fontSize: 22 }}
             />
           }
         />
         {isLoading ? (
           <Button
-            type="solid"
-            color="#3D1273"
-            radius="16"
+            type='solid'
+            color='#3D1273'
+            radius='16'
             buttonStyle={{ backgroundColor: '#3D1273' }}
             containerStyle={styles.button}
             loading
           />
         ) : (
           <Button
-            type="solid"
-            radius="16"
-            title="Log in"
+            type='solid'
+            radius='16'
+            title='Log in'
             buttonStyle={{ backgroundColor: '#3D1273' }}
             containerStyle={styles.button}
             onPress={handleClick}

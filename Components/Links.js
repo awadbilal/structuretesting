@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
-import { AsyncStorage, LogBox, Platform } from 'react-native';
+import { LogBox, Platform } from 'react-native';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import '../firebase';
@@ -30,12 +30,18 @@ import SingleProject from './Projects/SingleProjectPage/SingleProject';
 import SingleProjectPart2 from './Projects/SingleProjectPart2/SingleProjectPart2';
 import CreateProject from './Projects/CreateProject/CreateProject';
 
+// Settings Area and Pages
+import ProfileSettings from './Settings/Profile/Profile';
+import AboutUs from './Settings/About/About';
+import PrivacyPolicy from './Settings/Privacy/Privacy';
+import TermsAndConditions from './Settings/Terms/Terms';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Links = ({ navigation }) => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState(Platform.OS === "web" ? JSON.parse(localStorage.getItem('user')) : AsyncStorage.getItem('user'));
+  const [user, setUser] = React.useState();
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -46,7 +52,7 @@ const Links = ({ navigation }) => {
     const projectsSnapshot = await getDocs(collection(db, 'projects'));
     const newArr = [];
     await projectsSnapshot?.forEach((doc) => {
-      if(user){
+      if (!!user) {
         user?.projects?.forEach((pr) => {
           pr === doc?.id && newArr.push({ id: doc.id, ...doc.data() });
         });
@@ -132,11 +138,9 @@ const Links = ({ navigation }) => {
           options={{ headerShown: false }}
           component={Scan}
         />
-        <Tab.Screen
-          name='Settings'
-          options={{ headerShown: false }}
-          component={Settings}
-        />
+        <Tab.Screen name='Settings' options={{ headerShown: false }}>
+          {(props) => <Settings {...props} user={user} setUser={setUser} />}
+        </Tab.Screen>
       </Tab.Navigator>
     );
   };
@@ -161,9 +165,7 @@ const Links = ({ navigation }) => {
     //   {(props) => <Register {...props} setUser={setUser} />}
     // </Stack.Screen>,
     <Stack.Screen name='Register'>
-      {(props) => (
-        <EmailRegister {...props} setUser={setUser} />
-      )}
+      {(props) => <EmailRegister {...props} setUser={setUser} />}
     </Stack.Screen>,
     <Stack.Screen name='Login'>
       {(props) => <Login {...props} setUser={setUser} />}
@@ -185,13 +187,35 @@ const Links = ({ navigation }) => {
     projectsList?.map((item) => {
       return (
         <Stack.Screen key={`${item?.id}part2`} name={`${item?.id}part2`}>
-          {(props) => <SingleProjectPart2 {...props} item={item} />}
+          {(props) => <SingleProjectPart2 {...props} user={user} item={item} />}
         </Stack.Screen>
       );
     }),
     <Stack.Screen
       name='CreateProject'
       component={CreateProject}
+      options={{ headerShown: false }}
+    />,
+  ];
+
+  // Settings contains all the navigation for profile settings, privacy policy, about us, terms & conditions, and Logout sections.
+  const SETTINGS = [
+    <Stack.Screen name='ProfileSettings'>
+      {(props) => <ProfileSettings {...props} user={user} setUser={setUser} />}
+    </Stack.Screen>,
+    <Stack.Screen
+      name='AboutUs'
+      component={AboutUs}
+      options={{ headerShown: false }}
+    />,
+    <Stack.Screen
+      name='TermsAndConditions'
+      component={TermsAndConditions}
+      options={{ headerShown: false }}
+    />,
+    <Stack.Screen
+      name='PrivacyPolicy'
+      component={PrivacyPolicy}
       options={{ headerShown: false }}
     />,
   ];
@@ -208,6 +232,7 @@ const Links = ({ navigation }) => {
           />
         )}
         {user && [...PROJECTS]}
+        {user && [...SETTINGS]}
         {intro && !user && [...CREDENTIALS]}
         {!intro && !user && [...INTRO]}
       </Stack.Navigator>

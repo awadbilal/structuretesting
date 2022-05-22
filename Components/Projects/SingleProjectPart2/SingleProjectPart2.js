@@ -1,4 +1,4 @@
-import { AsyncStorage, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Input, Text } from 'react-native-elements';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -8,7 +8,7 @@ import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
 
-const SingleProjectPart2 = ({ navigation, item }) => {
+const SingleProjectPart2 = ({ navigation, item, user }) => {
   const [valueLevel, setValueLevel] = useState(0);
   const [valueDevice, setValueDevice] = useState(0);
   const [levelData, setLevelData] = useState(item?.levels[0]);
@@ -55,7 +55,6 @@ const SingleProjectPart2 = ({ navigation, item }) => {
 
   const handleDelete = async () => {
     // Function to handle deleting the project
-    const user = Platform.OS === "web" ? JSON.parse(localStorage.getItem("user")) : JSON.parse(AsyncStorage.getItem("user"));
     const newProjects = user?.projects?.filter((pr) => pr !== item?.id);
     await deleteDoc(doc(db, "projects", item?.id))
     .then(() => {
