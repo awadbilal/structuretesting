@@ -47,7 +47,7 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
           placeholder='Search Projects...'
           type='text'
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChangeText={(e) => setSearch(e)}
           inputContainerStyle={styles.searchBar}
           containerStyle={{ width: '100%' }}
           leftIcon={

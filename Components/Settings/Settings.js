@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styles } from './style';
 
-const Settings = ({ navigation, user, setUser }) => {
+const Settings = ({ navigation, setUser }) => {
   const [isLogout, setIsLogout] = React.useState(false);
 
   return (

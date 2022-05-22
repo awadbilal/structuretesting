@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
-import { LogBox, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import '../firebase';
@@ -41,7 +41,7 @@ const Tab = createBottomTabNavigator();
 
 const Links = ({ navigation }) => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState(false);
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -139,7 +139,7 @@ const Links = ({ navigation }) => {
           component={Scan}
         />
         <Tab.Screen name='Settings' options={{ headerShown: false }}>
-          {(props) => <Settings {...props} user={user} setUser={setUser} />}
+          {(props) => <Settings {...props} setUser={setUser} />}
         </Tab.Screen>
       </Tab.Navigator>
     );
@@ -241,5 +241,4 @@ const Links = ({ navigation }) => {
 };
 
 export default Links;
-LogBox.disableYellowBox = true;
 console.disableYellowBox = true;

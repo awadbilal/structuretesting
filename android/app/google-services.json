@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "478812076219",
+    "project_id": "cmp-capstone",
+    "storage_bucket": "cmp-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478812076219:android:fd4e8f18cc477e7d0a119e",
+        "android_client_info": {
+          "package_name": "com.cmpcapstone.structuretesting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478812076219-hel7l8380qhg2u23sjubgeqkhq9eblds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ9K175vzKUfDC3YxYTrpqqLL38q-WoRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478812076219-hel7l8380qhg2u23sjubgeqkhq9eblds.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "478812076219-gvqsstffhv98gdkgh4csvs8vuvmbt6mo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cmpcapstone.structureteste"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478812076219:android:7af77330889b8ec30a119e",
+        "android_client_info": {
+          "package_name": "com.structuretesting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478812076219-hel7l8380qhg2u23sjubgeqkhq9eblds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ9K175vzKUfDC3YxYTrpqqLL38q-WoRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478812076219-hel7l8380qhg2u23sjubgeqkhq9eblds.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "478812076219-gvqsstffhv98gdkgh4csvs8vuvmbt6mo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cmpcapstone.structureteste"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

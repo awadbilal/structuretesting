@@ -39,7 +39,7 @@ const SingleProject = ({ navigation, item }) => {
             placeholder={item?.title}
             type='text'
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChangeText={(e) => setTitle(e)}
             style={styles.font}
             containerStyle={{ backgroundColor: 'transparent' }}
             inputStyle={{ backgroundColor: 'transparent' }}
@@ -96,7 +96,9 @@ const SingleProject = ({ navigation, item }) => {
                 <Text style={styles.devicesUser}>{usr?.name}</Text>
                 <Text
                   style={styles.devicesRemove}
-                  onPress={() => setUsers(users.filter((id) => id?.id !== usr?.id))}
+                  onPress={() =>
+                    setUsers(users.filter((id) => id?.id !== usr?.id))
+                  }
                 >
                   X
                 </Text>

@@ -83,7 +83,7 @@ const EmailRegister = ({ navigation, setUser }) => {
           placeholder='John Doe'
           type='text'
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChangeText={(e) => setFormData({ ...formData, name: e })}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={
@@ -99,7 +99,7 @@ const EmailRegister = ({ navigation, setUser }) => {
           placeholder='John.doe@gmail.com'
           type='email'
           value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          onChangeText={(e) => setFormData({ ...formData, email: e })}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={
@@ -116,9 +116,7 @@ const EmailRegister = ({ navigation, setUser }) => {
           secureTextEntry
           type='password'
           value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
+          onChangeText={(e) => setFormData({ ...formData, password: e })}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={

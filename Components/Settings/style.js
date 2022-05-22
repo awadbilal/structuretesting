@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   itemButton: {
-    fontWeight: 700,
+    fontWeight: '700',
     fontSize: 16,
     lineHeight: 24,
     color: '#FEFEFE',

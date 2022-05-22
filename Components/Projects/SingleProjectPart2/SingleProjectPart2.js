@@ -56,14 +56,14 @@ const SingleProjectPart2 = ({ navigation, item, user }) => {
   const handleDelete = async () => {
     // Function to handle deleting the project
     const newProjects = user?.projects?.filter((pr) => pr !== item?.id);
-    await deleteDoc(doc(db, "projects", item?.id))
-    .then(() => {
-      updateDoc(doc(db, 'users', user?.id), {
-        projects: [...newProjects],
-      });
-      navigation.navigate("Projects")
-    })
-    .catch((err) => alert(err));
+    await deleteDoc(doc(db, 'projects', item?.id))
+      .then(() => {
+        updateDoc(doc(db, 'users', user?.id), {
+          projects: [...newProjects],
+        });
+        navigation.navigate('Projects');
+      })
+      .catch((err) => alert(err));
   };
   const data3 = [
     { label: 'Project Design', value: 0 },
@@ -96,7 +96,6 @@ const SingleProjectPart2 = ({ navigation, item, user }) => {
           />
         </View>
         <View style={{ width: '20%' }}>
-          (
           <MaterialIcons
             name='delete-forever'
             color='#F7F7F7'

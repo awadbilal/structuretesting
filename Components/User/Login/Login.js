@@ -10,10 +10,8 @@ import '../../../firebase';
 import { styles } from './style';
 
 const Login = ({ navigation, setUser }) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [usersList, setUsersList] = useState([]);
 
@@ -34,23 +32,18 @@ const Login = ({ navigation, setUser }) => {
   const handleClick = async () => {
     setIsLoading(true);
     const filteredData = await usersList?.filter(
-      (user) => user?.email.toLowerCase() === formData?.email.toLowerCase()
+      (user) => user.email.toLowerCase() == email.toLowerCase()
     );
-    if (filteredData?.length > 0) {
-      if (filteredData[0]?.password === formData?.password) {
+    if (filteredData.length > 0) {
+      if (filteredData[0].password === password) {
         await setUser(filteredData[0]);
       } else {
-        setFormData({
-          ...formData,
-          password: '',
-        });
+        setPassword('');
         alert('Incorrect password has been entered');
       }
     } else {
-      setFormData({
-        email: '',
-        password: '',
-      });
+      setEmail('');
+      setPassword('');
       alert('This email has not been registered yet.');
     }
     setIsLoading(false);
@@ -71,8 +64,8 @@ const Login = ({ navigation, setUser }) => {
         <Input
           placeholder='John.doe@gmail.com'
           type='email'
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={email}
+          onChangeText={(e) => setEmail(e)}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={
@@ -88,10 +81,8 @@ const Login = ({ navigation, setUser }) => {
           placeholder='******************'
           secureTextEntry
           type='password'
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
+          value={password}
+          onChangeText={(e) => setPassword(e)}
           style={{ color: '#FFF' }}
           inputContainerStyle={[styles.input]}
           leftIcon={

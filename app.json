@@ -5,11 +5,13 @@
     "version": "1.0.0",
     "slug": "structuretesting",
     "ios": {
-      "bundleIdentifier": "com.cmpcapstone.structuretester",
+      "bundleIdentifier": "com.cmpcapstone.structuretesting",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "1.0.1"
     },
     "android": {
-      "package": "com.cmpcapstone.structuretester",
+      "package": "com.cmpcapstone.structuretesting",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 2
     },
     "description": "",

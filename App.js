@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ImageBackground, LogBox } from 'react-native';
+import { ImageBackground } from 'react-native';
 import Background from './Assets/appBackground.png';
 import './firebase';
 
@@ -16,5 +16,4 @@ const App = () => {
 export default App;
 
 // The following line is to disable all warnings (Keys, depreciated packages, etc...)
-LogBox.disableYellowBox = true;
 console.disableYellowBox = true;
