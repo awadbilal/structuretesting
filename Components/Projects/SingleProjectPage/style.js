@@ -40,6 +40,7 @@ export const styles = StyleSheet.create({
   },
   levelsText: {
     fontWeight: '700',
+    width: '70%',
     fontSize: 14,
     lineHeight: 20,
     color: '#FEFEFE',
@@ -66,6 +67,7 @@ export const styles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 30,
     width: '100%',
+    height: 300,
   },
   devicesInnerContainer: {
     flexDirection: 'row',

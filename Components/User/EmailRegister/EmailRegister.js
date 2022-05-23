@@ -54,7 +54,10 @@ const EmailRegister = ({ navigation, setUser }) => {
       });
     } else {
       try {
-        const docRef = await addDoc(collection(db, 'users'), formData);
+        const docRef = await addDoc(collection(db, 'users'), {
+          ...formData,
+          projects: [],
+        });
         await setUser({
           ...formData,
           id: docRef.id,

@@ -29,6 +29,7 @@ import ResetPassword from './User/ResetPassword/ResetPassword';
 import SingleProject from './Projects/SingleProjectPage/SingleProject';
 import SingleProjectPart2 from './Projects/SingleProjectPart2/SingleProjectPart2';
 import CreateProject from './Projects/CreateProject/CreateProject';
+import RecordData from './Projects/RecordData/RecordData';
 
 // Settings Area and Pages
 import ProfileSettings from './Settings/Profile/Profile';
@@ -45,6 +46,7 @@ const Links = ({ navigation }) => {
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [dataFor, setDataFor] = React.useState();
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
@@ -133,11 +135,17 @@ const Links = ({ navigation }) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen
-          name='Scan'
-          options={{ headerShown: false }}
-          component={Scan}
-        />
+        <Tab.Screen name='Scan' options={{ headerShown: false }}>
+          {(props) => (
+            <Scan
+              {...props}
+              user={user}
+              setDataFor={setDataFor}
+              projectsList={projectsList}
+              setProjectsList={setProjectsList}
+            />
+          )}
+        </Tab.Screen>
         <Tab.Screen name='Settings' options={{ headerShown: false }}>
           {(props) => <Settings {...props} setUser={setUser} />}
         </Tab.Screen>
@@ -191,11 +199,14 @@ const Links = ({ navigation }) => {
         </Stack.Screen>
       );
     }),
-    <Stack.Screen
-      name='CreateProject'
-      component={CreateProject}
-      options={{ headerShown: false }}
-    />,
+    <Stack.Screen name='CreateProject' options={{ headerShown: false }}>
+      {(props) => (
+        <CreateProject {...props} user={user} setDataFor={setDataFor} />
+      )}
+    </Stack.Screen>,
+    <Stack.Screen name='RecordData' options={{ headerShown: false }}>
+      {(props) => <RecordData {...props} dataFor={dataFor} />}
+    </Stack.Screen>,
   ];
 
   // Settings contains all the navigation for profile settings, privacy policy, about us, terms & conditions, and Logout sections.

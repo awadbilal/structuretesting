@@ -62,12 +62,10 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   placeholderStyle: {
-    color: '#FFFFFF',
     backgroundColor: 'transparent',
     fontSize: 16,
   },
   selectedTextStyle: {
-    color: '#FFFFFF',
     backgroundColor: 'transparent',
     fontSize: 16,
   },

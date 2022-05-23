@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Text } from 'react-native-elements';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -87,24 +87,26 @@ const SingleProject = ({ navigation, item }) => {
           <Text style={styles.devicesUser}>{item?.admin?.name}</Text>
           <MaterialCommunityIcons name='crown' style={styles.devicesRemove} />
         </View>
-        {users
-          ?.filter((usr) => usr !== item?.admin?.id)
-          .map((usr, i) => {
-            return (
-              <View style={styles.devicesInnerContainer} key={i}>
-                <Text style={styles.devicesNumber}>{i + 2}</Text>
-                <Text style={styles.devicesUser}>{usr?.name}</Text>
-                <Text
-                  style={styles.devicesRemove}
-                  onPress={() =>
-                    setUsers(users.filter((id) => id?.id !== usr?.id))
-                  }
-                >
-                  X
-                </Text>
-              </View>
-            );
-          })}
+        <ScrollView>
+          {users
+            ?.filter((usr) => usr !== item?.admin?.id)
+            .map((usr, i) => {
+              return (
+                <View style={styles.devicesInnerContainer} key={i}>
+                  <Text style={styles.devicesNumber}>{i + 2}</Text>
+                  <Text style={styles.devicesUser}>{usr?.name}</Text>
+                  <Text
+                    style={styles.devicesRemove}
+                    onPress={() =>
+                      setUsers(users.filter((id) => id?.id !== usr?.id))
+                    }
+                  >
+                    X
+                  </Text>
+                </View>
+              );
+            })}
+        </ScrollView>
       </View>
       <Button
         type='solid'
