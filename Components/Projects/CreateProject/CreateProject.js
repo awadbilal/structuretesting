@@ -49,7 +49,7 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
         <View style={{ width: '80%' }}>
           <Input
             placeholder={title}
-            type='text'
+            type="text"
             value={title}
             onChangeText={(e) => setTitle(e)}
             style={styles.font}
@@ -58,8 +58,8 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
             inputContainerStyle={styles.input}
             leftIcon={
               <AntDesign
-                name='arrowleft'
-                color='#F7F7F7'
+                name="arrowleft"
+                color="#F7F7F7"
                 size={20}
                 style={{ marginRight: 10 }}
                 onPress={() => navigation.goBack()}
@@ -72,7 +72,7 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
         <Text style={styles.levelsText}>Number of Levels</Text>
         <Input
           placeholder={`${levelsNumber}`}
-          type='text'
+          type="text"
           value={`${levelsNumber}`}
           onChangeText={(e) => setLevelsNumber(e)}
           style={{
@@ -93,7 +93,7 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
         <View style={styles.devicesInnerContainer}>
           <Text style={styles.devicesNumber}>1</Text>
           <Text style={styles.devicesUser}>{user?.name}</Text>
-          <MaterialCommunityIcons name='crown' style={styles.devicesRemove} />
+          <MaterialCommunityIcons name="crown" style={styles.devicesRemove} />
         </View>
         <ScrollView>
           {users
@@ -117,15 +117,15 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
         </ScrollView>
       </View>
       <Button
-        type='solid'
-        radius='16'
-        title='Invite Others'
+        type="solid"
+        radius="16"
+        title="Invite Others"
         iconRight={true}
         icon={
           <MaterialCommunityIcons
-            name='link-variant'
+            name="link-variant"
             size={25}
-            color='#FEFEFE'
+            color="#FEFEFE"
           />
         }
         titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
@@ -134,9 +134,9 @@ const SingleProject = ({ navigation, user, setDataFor }) => {
         onPress={handleInvite}
       />
       <Button
-        type='solid'
-        radius='16'
-        title='Save and Continue'
+        type="solid"
+        radius="16"
+        title="Save and Continue"
         titleStyle={styles.buttonTitle}
         buttonStyle={{ backgroundColor: '#3D1273' }}
         containerStyle={styles.inviteAndContinue}
