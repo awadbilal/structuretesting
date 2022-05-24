@@ -49,18 +49,6 @@ const Scan = ({
 
   const uploadData = async () => {
     const project = await getDoc(doc(db, 'projects', projectCode));
-    console.log(
-      '🚀 ~ file: Scan.js ~ line 52 ~ uploadData ~ project',
-      project.data()
-    );
-    console.log(
-      '🚀 ~ file: Scan.js ~ line 52 ~ uploadData ~ gyroscope',
-      gyroscope
-    );
-    console.log(
-      '🚀 ~ file: Scan.js ~ line 52 ~ uploadData ~ accelerometer',
-      accelerometer
-    );
     // const userIndex = await project?.users?.length;
     // const levels = await project?.levels;
     // const devices = await project?.levels[project?.levels?.length]?.devices;
@@ -71,10 +59,24 @@ const Scan = ({
         {
           id: user?.id,
           name: user?.name,
+          levels: project?.data()?.users?.levels
+            ? [
+                ...project?.data()?.users?.levels,
+                {
+                  level: project?.data()?.users?.levels?.length,
+                  gyroscope: gyroscope,
+                  accelerometer: accelerometer,
+                },
+              ]
+            : [
+                {
+                  level: 0,
+                  gyroscope: gyroscope,
+                  accelerometer: accelerometer,
+                },
+              ],
         },
       ],
-      gyroscope: gyroscope,
-      accelerometer: accelerometer,
     }).catch((err) => alert(err));
 
     await updateDoc(doc(db, 'users', user?.id), {
@@ -91,10 +93,10 @@ const Scan = ({
   }, [updateData]);
 
   return (
-    <View style={styles.container}>
+    <>
       {!isReady ? (
         !updateData ? (
-          <>
+          <View style={styles.container}>
             <View style={styles.header}>
               <Text style={styles.title}>Join Project</Text>
             </View>
@@ -137,9 +139,16 @@ const Scan = ({
               containerStyle={styles.button}
               onPress={() => console.log('Hello QRCode')}
             />
-          </>
+          </View>
         ) : (
-          <View style={styles.header}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
             <Text style={styles.title}>Uploading Data</Text>
           </View>
         )
@@ -153,7 +162,7 @@ const Scan = ({
           setUpdateData={setUpdateData}
         />
       )}
-    </View>
+    </>
   );
 };
 

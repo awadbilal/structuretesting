@@ -57,6 +57,8 @@ const RecordData = ({
   };
 
   const handleStart = useCallback(() => {
+    else if (seconds > 60) return alert('Seconds cannot exceed 60');
+    else if (minutes > 60) return alert('Minutes cannot exceed 60');
     _subscribe();
     setRemainingTime(true);
     Gyroscope.setUpdateInterval(16);
