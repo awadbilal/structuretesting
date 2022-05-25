@@ -209,6 +209,8 @@ const Links = ({ navigation }) => {
           user={user}
           update={update}
           setUpdate={setUpdate}
+          projectsList={projectsList}
+          setProjectsList={setProjectsList}
         />
       )}
     </Stack.Screen>,

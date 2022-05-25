@@ -1,12 +1,13 @@
-import { View, ImageBackground } from 'react-native';
+import { Platform, View, ImageBackground } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Input, Text, Button } from 'react-native-elements';
 import { Dropdown } from 'react-native-element-dropdown';
+import * as ImagePicker from 'expo-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, uploadBytes, getStorage } from 'firebase/storage';
 import { db, store } from '../../../firebase';
 import { styles } from './style';
 
@@ -56,6 +57,16 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
     fetchImage();
     setDeviceData(item?.users[0]);
     setLevelData(item?.users[0]?.levels[0]);
+
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('sorry, we eed camera roll permissions to make this work');
+        }
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -87,7 +98,25 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
       .catch((err) => alert(err));
   };
 
-  const handleImageUpload = async () => {};
+  const handleImageUpload = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    }).catch((err) => alert(err));
+
+    const name = await (Math.random() + 1).toString(36);
+    if (name.includes('.')) name = name.replace('.', '_');
+    const ref = await ref(getStorage(), `${name}.jpg`);
+    const img = await fetch(result.uri);
+    const bytes = await img.blob();
+    await uploadBytes(ref, bytes).catch((err) => alert(err));
+    await updateDoc(doc(db, 'projects', item?.id), {
+      image: `${name}.jpg`,
+    }).catch((err) => alert(err));
+    setUrl(`/${name}.jpg`);
+  };
 
   return (
     <View style={styles.container}>

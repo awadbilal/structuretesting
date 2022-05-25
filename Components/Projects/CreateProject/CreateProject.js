@@ -4,11 +4,18 @@ import { Button, Input, Text } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RecordData from '../RecordData/RecordData';
-import { doc, addDoc, updateDoc, collection } from 'firebase/firestore';
+import { doc, addDoc, updateDoc, collection, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from '../SingleProjectPage/style';
 
-const CreateProject = ({ navigation, user, update, setUpdate }) => {
+const CreateProject = ({
+  navigation,
+  user,
+  update,
+  setUpdate,
+  projectsList,
+  setProjectsList,
+}) => {
   const [users, setUsers] = useState([]);
   const [title, setTitle] = useState('New Project');
   const [levelsNumber, setLevelsNumber] = useState(1);
@@ -77,6 +84,8 @@ const CreateProject = ({ navigation, user, update, setUpdate }) => {
         },
       ],
     }).catch((err) => alert(err));
+    const updatedDocument = await getDoc(doc(db, 'projects', projectCode));
+    setProjectsList([...projectsList, { ...updatedDocument.data() }]);
     setUpdate(!update);
   };
 
