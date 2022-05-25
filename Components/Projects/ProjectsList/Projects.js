@@ -35,7 +35,7 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Project List</Text>
+          <Text style={styles.title}>Projects List</Text>
           <Ionicons
             name='add'
             color='#FEFEFE'
@@ -55,7 +55,7 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
               name='search'
               color='#FEFEFE'
               size={20}
-              style={{ marginRight: 10, marginLeft: 10 }}
+              style={{ marginHorizontal: 10 }}
             />
           }
         />
@@ -67,9 +67,7 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
               onPress={() => navigation.navigate(`${item.id}`)}
             >
               <Text style={styles.projectTitle}>{item?.title}</Text>
-              <Text style={styles.projectNumbers}>
-                {item?.levels?.length} Levels
-              </Text>
+              <Text style={styles.projectNumbers}>{item?.levels} Levels</Text>
               <Text style={styles.projectDate}>{item?.date}</Text>
               <Text style={styles.projectNumbers}>
                 {item?.users?.length} Devices

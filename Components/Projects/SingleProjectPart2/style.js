@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   dropdownList: {
-    backgroundColor: '#FFFFFF80',
+    backgroundColor: '#FFFFFF20',
     borderRadius: 8,
     borderColor: 'transparent',
   },
@@ -64,17 +64,44 @@ export const styles = StyleSheet.create({
   placeholderStyle: {
     backgroundColor: 'transparent',
     fontSize: 16,
+    color: '#F7F7F7',
   },
   selectedTextStyle: {
     backgroundColor: 'transparent',
     fontSize: 16,
+    color: '#F7F7F7',
   },
   infoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#1E1F2014',
     borderRadius: 16,
     padding: 20,
     width: '100%',
     height: 300,
     marginTop: 20,
+  },
+  latestGradient: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    resizeMode: 'contain',
+    borderRadius: 16,
+  },
+  addPicture: {
+    width: '100%',
+    paddingVertical: 14,
+    backgroundColor: '#3D1273',
+    borderRadius: 16,
+    textAlign: 'left',
+    marginTop: 20,
+  },
+  buttonTitle: {
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#FEFEFE',
+    textAlign: 'left',
   },
 });

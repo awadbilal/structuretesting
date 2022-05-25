@@ -14,6 +14,11 @@ export const styles = StyleSheet.create({
     width: '105%',
     marginBottom: 30,
   },
+  title: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: '700',
+  },
   input: {
     backgroundColor: 'transparent',
     borderRadius: 8,

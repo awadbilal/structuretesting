@@ -9,19 +9,11 @@ const RecordData = ({
   setGyroscope,
   setAccelerometer,
   setIsReady,
-  refreshing,
-  setRefreshing,
   setUpdateData,
 }) => {
   const [seconds, setSeconds] = useState();
-  const [minutes, setMinutes] = useState();
   const [remainingTime, setRemainingTime] = useState();
   const [subscription, setSubscription] = useState(null);
-  const [data, setData] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
   const xGyro = [],
     yGyro = [],
     zGyro = [],
@@ -30,20 +22,16 @@ const RecordData = ({
     zAcc = [];
 
   const _subscribe = () => {
-    setSubscription(
-      Gyroscope.addListener((gyroscopeData) => {
-        setData(gyroscopeData);
-      })
-    );
+    setSubscription(true);
     Gyroscope.addListener((gyroscopeData) => {
       xGyro.push(gyroscopeData.x);
       yGyro.push(gyroscopeData.y);
       zGyro.push(gyroscopeData.z);
     });
     Accelerometer.addListener((accelerometerData) => {
-      xAcc.push(accelerometerData.x);
-      yAcc.push(accelerometerData.y);
-      zAcc.push(accelerometerData.z);
+      xAcc.push(Math.round(accelerometerData.x * 10000) / 10000);
+      yAcc.push(Math.round(accelerometerData.y * 10000) / 10000);
+      zAcc.push(Math.round(accelerometerData.z * 10000) / 10000);
     });
   };
 
@@ -53,33 +41,35 @@ const RecordData = ({
   };
 
   const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
+    return new Promise(() =>
+      setTimeout(() => {
+        _subscribe();
+        setRemainingTime(true);
+        Gyroscope.setUpdateInterval(20);
+        Accelerometer.setUpdateInterval(20);
+        setGyroscope({
+          x: xGyro,
+          y: yGyro,
+          z: zGyro,
+        });
+        setAccelerometer({
+          x: xAcc,
+          y: yAcc,
+          z: zAcc,
+        });
+        _unsubscribe();
+        setRemainingTime(false);
+        setSubscription(null);
+        setUpdateData(true);
+        setIsReady(false);
+      }, timeout)
+    );
   };
 
   const handleStart = useCallback(() => {
-    if (seconds > 60) return alert('Seconds cannot exceed 60');
-    else if (minutes > 60) return alert('Minutes cannot exceed 60');
-    _subscribe();
-    setRemainingTime(true);
-    Gyroscope.setUpdateInterval(16);
-    Accelerometer.setUpdateInterval(16);
-    wait(1000 * (parseInt(minutes) * 60 + parseInt(seconds))).then(() => {
-      setGyroscope({
-        x: xGyro,
-        y: yGyro,
-        z: zGyro,
-      });
-      setAccelerometer({
-        x: xAcc,
-        y: yAcc,
-        z: zAcc,
-      });
-      _unsubscribe();
-      setRemainingTime(false);
-      setSubscription(null);
-      setUpdateData(true);
-      setIsReady(false);
-    });
+    if (seconds > 60) return alert('Seconds cannot exceed 60 seconds');
+    wait(1000 * parseInt(seconds));
+    return () => _unsubscribe();
   }, []);
 
   return (
@@ -123,43 +113,24 @@ const RecordData = ({
         </View>
       </View>
       {!remainingTime && (
-        <View style={styles.timerContainer}>
-          <Input
-            placeholder='MM'
-            type='number'
-            placeholderTextColor={'#FFFFFF75'}
-            style={{ textAlign: 'right', fontSize: 24, color: '#FFFFFF' }}
-            inputContainerStyle={styles.timerInputContainer}
-            containerStyle={styles.timerContainerStyle}
-            value={minutes}
-            maxLength={2}
-            onChangeText={(e) => setMinutes(e)}
-            keyboardType='number-pad'
-          />
-          <Text
-            h1
-            style={{
-              width: '20%',
-              color: '#FFFFFF',
-              textAlign: 'center',
-              paddingBottom: 14,
-            }}
-          >
-            :
-          </Text>
-          <Input
-            placeholder='SS'
-            type='number'
-            placeholderTextColor={'#FFFFFF75'}
-            style={{ textAlign: 'left', fontSize: 24, color: '#FFFFFF' }}
-            inputContainerStyle={styles.timerInputContainer}
-            containerStyle={styles.timerContainerStyle}
-            value={seconds}
-            maxLength={2}
-            onChangeText={(e) => setSeconds(e)}
-            keyboardType='number-pad'
-          />
-        </View>
+        <>
+          <View style={styles.timerContainer}>
+            <Text>Seconds to record</Text>
+            <Input
+              placeholder='SS'
+              type='number'
+              placeholderTextColor={'#FFFFFF75'}
+              style={{ textAlign: 'left', fontSize: 24, color: '#FFFFFF' }}
+              inputContainerStyle={styles.timerInputContainer}
+              containerStyle={styles.timerContainerStyle}
+              value={seconds}
+              maxLength={2}
+              onChangeText={(e) => setSeconds(e)}
+              keyboardType='number-pad'
+            />
+          </View>
+          <Text>Note that time interval for data is 20 Gigasecond</Text>
+        </>
       )}
     </View>
   );

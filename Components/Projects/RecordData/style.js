@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
   timerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '100%',
     height: 100,
     padding: 20,

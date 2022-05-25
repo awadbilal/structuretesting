@@ -8,14 +8,7 @@ import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { styles } from './style';
 
-const Scan = ({
-  navigation,
-  user,
-  refreshing,
-  setRefreshing,
-  projectsList,
-  setProjectsList,
-}) => {
+const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
   const [projectCode, setProjectCode] = useState();
   const [isReady, setIsReady] = useState(false);
   const [gyroscope, setGyroscope] = useState();
@@ -49,9 +42,6 @@ const Scan = ({
 
   const uploadData = async () => {
     const project = await getDoc(doc(db, 'projects', projectCode));
-    // const userIndex = await project?.users?.length;
-    // const levels = await project?.levels;
-    // const devices = await project?.levels[project?.levels?.length]?.devices;
 
     await updateDoc(doc(db, 'projects', projectCode), {
       users: [
@@ -84,7 +74,10 @@ const Scan = ({
         ? [...user?.projects, projectCode]
         : [projectCode],
     }).catch((err) => alert(err));
-    setDataFor(projectCode);
+    setUser({
+      ...user,
+      projects: [...user?.projects, projectCode],
+    });
     setProjectsList([...projectsList, project.data()]);
   };
 
@@ -149,7 +142,10 @@ const Scan = ({
               textAlign: 'center',
             }}
           >
-            <Text style={styles.title}>Uploading Data</Text>
+            <Text style={styles.title}>
+              Data has been recorded and uploaded, head to projects list to
+              check your project
+            </Text>
           </View>
         )
       ) : (
@@ -157,8 +153,6 @@ const Scan = ({
           setGyroscope={setGyroscope}
           setAccelerometer={setAccelerometer}
           setIsReady={setIsReady}
-          refreshing={refreshing}
-          setRefreshing={setRefreshing}
           setUpdateData={setUpdateData}
         />
       )}

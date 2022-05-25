@@ -8,28 +8,32 @@ import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
 
-const SingleProject = ({ navigation, item }) => {
+const SingleProject = ({ navigation, item, user }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [users, setUsers] = useState(item?.users);
   const [title, setTitle] = useState(item?.title);
+  const [show, setShow] = useState(false);
 
-  async function handleSave() {
+  const handleSave = async () => {
     setIsEditable(!isEditable);
-    // Send to firebase
     await updateDoc(doc(db, 'projects', item.id), {
       title: title,
     });
-  }
+  };
 
-  async function handleUsers() {
+  const handleUsers = async () => {
     await updateDoc(doc(db, 'projects', item.id), {
       users: [...users],
     });
-  }
+  };
 
   useEffect(() => {
     handleUsers();
   }, [users]);
+
+  const handleInvite = () => {
+    setShow(!show);
+  };
 
   return (
     <View style={styles.container}>
@@ -56,29 +60,31 @@ const SingleProject = ({ navigation, item }) => {
             disabled={isEditable ? false : true}
           />
         </View>
-        <View style={{ width: '20%' }}>
-          {isEditable ? (
-            <Octicons
-              name='check'
-              color='#F7F7F7'
-              size={22}
-              style={{ position: 'relative', top: -5 }}
-              onPress={() => handleSave()}
-            />
-          ) : (
-            <Octicons
-              name='pencil'
-              color='#F7F7F7'
-              size={20}
-              style={{ position: 'relative', top: -5 }}
-              onPress={() => setIsEditable(!isEditable)}
-            />
-          )}
-        </View>
+        {user.id === item?.admin.id && (
+          <View style={{ width: '20%' }}>
+            {isEditable ? (
+              <Octicons
+                name='check'
+                color='#F7F7F7'
+                size={22}
+                style={{ position: 'relative', top: -5 }}
+                onPress={() => handleSave()}
+              />
+            ) : (
+              <Octicons
+                name='pencil'
+                color='#F7F7F7'
+                size={20}
+                style={{ position: 'relative', top: -5 }}
+                onPress={() => setIsEditable(!isEditable)}
+              />
+            )}
+          </View>
+        )}
       </View>
       <View style={styles.levels}>
         <Text style={styles.levelsText}>Number of Levels</Text>
-        <Text style={styles.levelsNumber}>{item?.levels?.length}</Text>
+        <Text style={styles.levelsNumber}>{item?.levels}</Text>
       </View>
       <Text style={styles.devices}>Linked Devices</Text>
       <View style={styles.devicesContainer}>
@@ -89,25 +95,51 @@ const SingleProject = ({ navigation, item }) => {
         </View>
         <ScrollView>
           {users
-            ?.filter((usr) => usr !== item?.admin?.id)
+            ?.filter((usr) => {
+              console.log(usr);
+              return usr.id !== item?.admin?.id;
+            })
             .map((usr, i) => {
               return (
                 <View style={styles.devicesInnerContainer} key={i}>
                   <Text style={styles.devicesNumber}>{i + 2}</Text>
                   <Text style={styles.devicesUser}>{usr?.name}</Text>
-                  <Text
-                    style={styles.devicesRemove}
-                    onPress={() =>
-                      setUsers(users.filter((id) => id?.id !== usr?.id))
-                    }
-                  >
-                    X
-                  </Text>
+                  {user?.id == item?.admin?.id ? (
+                    <Text
+                      style={styles.devicesRemove}
+                      onPress={() =>
+                        setUsers(users.filter((id) => id?.id !== usr?.id))
+                      }
+                    >
+                      X
+                    </Text>
+                  ) : (
+                    <Text style={styles.devicesRemove}>✔</Text>
+                  )}
                 </View>
               );
             })}
         </ScrollView>
       </View>
+      <Button
+        type='solid'
+        radius='16'
+        title={show ? item?.id : 'Invite Others'}
+        iconRight={true}
+        icon={
+          show ? (
+            <MaterialCommunityIcons
+              name='link-variant'
+              size={25}
+              color='#FEFEFE'
+            />
+          ) : null
+        }
+        titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
+        buttonStyle={{ backgroundColor: '#3D1273' }}
+        containerStyle={styles.inviteAndContinue}
+        onPress={() => handleInvite()}
+      />
       <Button
         type='solid'
         radius='16'

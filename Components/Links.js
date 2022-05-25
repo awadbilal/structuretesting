@@ -43,6 +43,7 @@ const Links = ({ navigation }) => {
   const [intro, setIntro] = React.useState(false);
   const [projectsList, setProjectsList] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [update, setUpdate] = React.useState(false);
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
@@ -68,7 +69,7 @@ const Links = ({ navigation }) => {
 
   React.useEffect(() => {
     fetchData();
-  }, [refreshing, user]);
+  }, [refreshing, user, update]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -136,8 +137,6 @@ const Links = ({ navigation }) => {
             <Scan
               {...props}
               user={user}
-              refreshing={refreshing}
-              setRefreshing={setRefreshing}
               projectsList={projectsList}
               setProjectsList={setProjectsList}
             />
@@ -185,20 +184,32 @@ const Links = ({ navigation }) => {
     projectsList?.map((item) => {
       return (
         <Stack.Screen key={`${item?.id}part1`} name={`${item?.id}`}>
-          {(props) => <SingleProject {...props} item={item} />}
+          {(props) => <SingleProject {...props} item={item} user={user} />}
         </Stack.Screen>
       );
     }),
     projectsList?.map((item) => {
       return (
         <Stack.Screen key={`${item?.id}part2`} name={`${item?.id}part2`}>
-          {(props) => <SingleProjectPart2 {...props} user={user} item={item} />}
+          {(props) => (
+            <SingleProjectPart2
+              {...props}
+              user={user}
+              item={item}
+              setUser={setUser}
+            />
+          )}
         </Stack.Screen>
       );
     }),
     <Stack.Screen name='CreateProject' options={{ headerShown: false }}>
       {(props) => (
-        <CreateProject {...props} user={user} setDataFor={setDataFor} />
+        <CreateProject
+          {...props}
+          user={user}
+          update={update}
+          setUpdate={setUpdate}
+        />
       )}
     </Stack.Screen>,
   ];
