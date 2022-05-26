@@ -72,7 +72,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-          alert('sorry, we eed camera roll permissions to make this work');
+          alert('sorry, we need camera roll permissions to make this work');
         }
       }
     })();

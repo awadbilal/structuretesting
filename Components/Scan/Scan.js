@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { Image } from '@rneui/themed';
 import ScanImage from '../../Assets/Scan.png';
 import RecordData from '../Projects/RecordData/RecordData';
-import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { styles } from './style';
+import QRScan from './QRScan';
 
 const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
   const [projectCode, setProjectCode] = useState();
@@ -14,6 +15,8 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
   const [gyroscope, setGyroscope] = useState();
   const [accelerometer, setAccelerometer] = useState();
   const [updateData, setUpdateData] = useState(false);
+  const [scanned, setScanned] = useState(false);
+  const [start, setStart] = useState(false);
 
   const handleJoin = async () => {
     // Handle Join Functionality
@@ -36,9 +39,9 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
     }
   };
 
-  const handleQRCode = async () => {
-    // A function to handle joining through QRCode
-  };
+  // const handleQRCode = async () => {
+  //   // A function to handle joining through QRCode
+  // };
 
   const uploadData = async () => {
     const project = await getDoc(doc(db, 'projects', projectCode));
@@ -123,14 +126,28 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
               containerStyle={styles.button}
               onPress={() => handleJoin()}
             />
-            <Image source={ScanImage} style={styles.qrcode} />
+            {!start ? (
+              <Image source={ScanImage} style={styles.qrcode} />
+            ) : (
+              <View style={styles.qrcode}>
+                <QRScan
+                  scanned={scanned}
+                  setScanned={setScanned}
+                  setProjectCode={setProjectCode}
+                  handleJoin={handleJoin}
+                />
+              </View>
+            )}
             <Button
               type='solid'
               radius='16'
               title='Scan QR Code to join instead'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
-              onPress={() => console.log('Hello QRCode')}
+              onPress={() => {
+                setStart(!start);
+                setScanned(false);
+              }}
             />
           </View>
         ) : (
