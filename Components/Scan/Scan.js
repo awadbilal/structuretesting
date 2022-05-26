@@ -8,7 +8,7 @@ import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { styles } from './style';
 
-const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
+const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
   const [projectCode, setProjectCode] = useState();
   const [isReady, setIsReady] = useState(false);
   const [gyroscope, setGyroscope] = useState();
@@ -94,8 +94,8 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
               <Text style={styles.title}>Join Project</Text>
             </View>
             <Input
-              placeholder="K4z5mZeFa153"
-              type="text"
+              placeholder='K4z5mZeFa153'
+              type='text'
               value={projectCode}
               onChangeText={(e) => setProjectCode(e)}
               style={{ color: '#FFF' }}
@@ -116,18 +116,18 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
               }
             />
             <Button
-              type="solid"
-              radius="16"
-              title="Join Project"
+              type='solid'
+              radius='16'
+              title='Join Project'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => handleJoin()}
             />
             <Image source={ScanImage} style={styles.qrcode} />
             <Button
-              type="solid"
-              radius="16"
-              title="Scan QR Code to join instead"
+              type='solid'
+              radius='16'
+              title='Scan QR Code to join instead'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => console.log('Hello QRCode')}
@@ -140,12 +140,22 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
               alignItems: 'center',
               justifyContent: 'center',
               textAlign: 'center',
+              padding: 30,
             }}
           >
-            <Text style={styles.title}>
+            <Text style={[styles.title, { textAlign: 'center' }]}>
               Data has been recorded and uploaded, head to projects list to
               check your project
             </Text>
+            <Button
+              type='solid'
+              radius='16'
+              title='View projects list'
+              titleStyle={styles.buttonTitle}
+              buttonStyle={{ backgroundColor: '#3D1273' }}
+              containerStyle={styles.inviteAndContinue}
+              onPress={() => navigation.goBack()}
+            />
           </View>
         )
       ) : (

@@ -11,7 +11,9 @@ import { styles } from './style';
 
 const SingleProject = ({ navigation, item, user }) => {
   const [isEditable, setIsEditable] = useState(false);
-  const [users, setUsers] = useState(item?.users);
+  const [users, setUsers] = useState(
+    Array.isArray(item?.users) && item?.users.length !== 0 ? item.users : []
+  );
   const [title, setTitle] = useState(item?.title);
   const [show, setShow] = useState(false);
 
@@ -43,7 +45,7 @@ const SingleProject = ({ navigation, item, user }) => {
           <View style={{ width: '80%' }}>
             <Input
               placeholder={item?.title}
-              type="text"
+              type='text'
               value={title}
               onChangeText={(e) => setTitle(e)}
               style={styles.font}
@@ -52,8 +54,8 @@ const SingleProject = ({ navigation, item, user }) => {
               inputContainerStyle={styles.input}
               leftIcon={
                 <AntDesign
-                  name="arrowleft"
-                  color="#F7F7F7"
+                  name='arrowleft'
+                  color='#F7F7F7'
                   size={20}
                   style={{ marginRight: 10 }}
                   onPress={() => navigation.goBack()}
@@ -66,16 +68,16 @@ const SingleProject = ({ navigation, item, user }) => {
             <View style={{ width: '20%' }}>
               {isEditable ? (
                 <Octicons
-                  name="check"
-                  color="#F7F7F7"
+                  name='check'
+                  color='#F7F7F7'
                   size={22}
                   style={{ position: 'relative', top: -5 }}
                   onPress={() => handleSave()}
                 />
               ) : (
                 <Octicons
-                  name="pencil"
-                  color="#F7F7F7"
+                  name='pencil'
+                  color='#F7F7F7'
                   size={20}
                   style={{ position: 'relative', top: -5 }}
                   onPress={() => setIsEditable(!isEditable)}
@@ -102,7 +104,7 @@ const SingleProject = ({ navigation, item, user }) => {
                 <Text style={styles.devicesNumber}>1</Text>
                 <Text style={styles.devicesUser}>{item?.admin?.name}</Text>
                 <MaterialCommunityIcons
-                  name="crown"
+                  name='crown'
                   style={styles.devicesRemove}
                 />
               </View>
@@ -136,16 +138,16 @@ const SingleProject = ({ navigation, item, user }) => {
           )}
         </View>
         <Button
-          type="solid"
-          radius="16"
+          type='solid'
+          radius='16'
           title={show ? item?.id : 'Invite Others'}
           iconRight={true}
           icon={
             show ? (
               <MaterialCommunityIcons
-                name="link-variant"
+                name='link-variant'
                 size={25}
-                color="#FEFEFE"
+                color='#FEFEFE'
               />
             ) : null
           }
@@ -155,9 +157,9 @@ const SingleProject = ({ navigation, item, user }) => {
           onPress={() => handleInvite()}
         />
         <Button
-          type="solid"
-          radius="16"
-          title="Continue"
+          type='solid'
+          radius='16'
+          title='Continue'
           titleStyle={styles.buttonTitle}
           buttonStyle={{ backgroundColor: '#3D1273' }}
           containerStyle={styles.inviteAndContinue}

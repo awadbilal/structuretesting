@@ -47,6 +47,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
   }
 
   async function fetchImage() {
+    if (!item?.image) return;
     const reference = await ref(store, `/${item?.image}`);
     await getDownloadURL(reference)
       .then((data) => setUrl(data))
@@ -55,8 +56,16 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
 
   useEffect(() => {
     fetchImage();
-    setDeviceData(item?.users[0]);
-    setLevelData(item?.users[0]?.levels[0]);
+    setDeviceData(
+      Array.isArray(item?.users) && item?.users.length !== 0
+        ? item?.users[0]
+        : []
+    );
+    setLevelData(
+      Array.isArray(item?.users) && item?.users.length !== 0
+        ? item?.users[0]?.levels[0]
+        : []
+    );
 
     (async () => {
       if (Platform.OS !== 'web') {
@@ -93,7 +102,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
         await deleteDoc(doc(db, 'projects', item?.id)).catch((err) =>
           alert(err)
         );
-        navigation.navigate('Projects');
+        navigation.replace('Projects');
       })
       .catch((err) => alert(err));
   };
@@ -125,7 +134,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           <View style={{ width: '80%' }}>
             <Input
               placeholder={item?.title}
-              type="text"
+              type='text'
               value={item?.title}
               style={styles.font}
               containerStyle={{ backgroundColor: 'transparent' }}
@@ -133,8 +142,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               inputContainerStyle={styles.input}
               leftIcon={
                 <AntDesign
-                  name="arrowleft"
-                  color="#F7F7F7"
+                  name='arrowleft'
+                  color='#F7F7F7'
                   size={20}
                   style={{ marginRight: 10 }}
                   onPress={() => navigation.goBack()}
@@ -146,8 +155,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           <View style={{ width: '20%' }}>
             {item?.admin?.id === user?.id && (
               <MaterialIcons
-                name="delete-forever"
-                color="#F7F7F7"
+                name='delete-forever'
+                color='#F7F7F7'
                 size={20}
                 style={{ position: 'relative', top: -13 }}
                 onPress={() => handleDelete()}
@@ -164,8 +173,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               containerStyle={styles.dropdownList}
               iconColor={'#FFFFFF'}
               data={data2}
-              labelField="label"
-              valueField="value"
+              labelField='label'
+              valueField='value'
               value={valueDevice}
               onChange={(item) => {
                 setValueDevice(item.value);
@@ -180,8 +189,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               containerStyle={styles.dropdownList}
               iconColor={'#FFFFFF'}
               data={data1}
-              labelField="label"
-              valueField="value"
+              labelField='label'
+              valueField='value'
               value={valueLevel}
               onChange={(item) => {
                 setValueLevel(item.value);
@@ -205,8 +214,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           containerStyle={styles.dropdownList}
           iconColor={'#FFFFFF'}
           data={data3}
-          labelField="label"
-          valueField="value"
+          labelField='label'
+          valueField='value'
           value={mainArea}
           onChange={(item) => {
             setMainArea(item.value);
@@ -239,12 +248,12 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
         </View>
         {mainArea === 0 && !item?.image && (
           <Button
-            type="solid"
-            radius="16"
-            title="Upload Project Design"
+            type='solid'
+            radius='16'
+            title='Upload Project Design'
             iconRight={true}
             icon={
-              <MaterialCommunityIcons name="upload" size={25} color="#FEFEFE" />
+              <MaterialCommunityIcons name='upload' size={25} color='#FEFEFE' />
             }
             titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
             buttonStyle={{ backgroundColor: '#3D1273' }}

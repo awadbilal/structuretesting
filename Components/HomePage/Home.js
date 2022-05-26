@@ -16,7 +16,14 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { store } from '../../firebase';
 import { styles } from './style';
 
-const Home = ({ navigation, data, refreshing, setRefreshing, fetchData }) => {
+const Home = ({
+  navigation,
+  user,
+  data,
+  refreshing,
+  setRefreshing,
+  fetchData,
+}) => {
   const [projectsList, setProjectsList] = React.useState(data);
 
   async function editList() {
@@ -35,7 +42,8 @@ const Home = ({ navigation, data, refreshing, setRefreshing, fetchData }) => {
 
   React.useEffect(() => {
     editList();
-    fetchImage();
+    fetchData();
+    projectsList[0]?.image && fetchImage();
   }, []);
 
   // Refreshing the page by scrolling down
@@ -44,7 +52,6 @@ const Home = ({ navigation, data, refreshing, setRefreshing, fetchData }) => {
   };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchData();
     wait(600).then(() => setRefreshing(false));
   }, []);
 
@@ -57,47 +64,87 @@ const Home = ({ navigation, data, refreshing, setRefreshing, fetchData }) => {
     >
       <View style={styles.container}>
         <Text style={styles.title}>Welcome Back!</Text>
-        <View style={styles.latestProject}>
-          <ImageBackground
-            source={{ uri: url }}
-            style={styles.latestGradient}
-          />
-          <ImageBackground
-            source={ImageGradient}
-            style={styles.latestGradient}
-          />
-          <Text style={styles.latestSub}>Your Latest Project</Text>
-          <Text style={styles.latestTitle}>{projectsList[0]?.title}</Text>
-        </View>
-        <View style={styles.chartsContainer}>
-          <View style={styles.chartArea}>
-            <Image source={Chart1} containerStyle={styles.chartImage} />
-          </View>
-          <View style={styles.chartArea}>
-            <Image source={Chart2} containerStyle={styles.chartImage} />
-          </View>
-        </View>
-        <View style={styles.projectsContainer}>
-          <Text style={styles.projectsHeader}>List of Projects</Text>
-          <ArrowRight
-            name="arrowright"
-            color="#FEFEFE"
-            size={20}
-            onPress={() => navigation.navigate('Projects')}
-          />
-        </View>
-        {projectsList?.map((item) => {
-          return (
+        <Text style={[styles.title, { marginLeft: 50 }]}>{user?.name}</Text>
+        {Array.isArray(projectsList) && projectsList.length !== 0 ? (
+          <>
+            <View style={styles.latestProject}>
+              {projectsList[0]?.image && (
+                <ImageBackground
+                  source={{ uri: url }}
+                  style={styles.latestGradient}
+                />
+              )}
+              <ImageBackground
+                source={ImageGradient}
+                style={styles.latestGradient}
+              />
+              <Text style={styles.latestSub}>Your Latest Project</Text>
+              <Text style={styles.latestTitle}>{projectsList[0]?.title}</Text>
+            </View>
+            <View style={styles.chartsContainer}>
+              <View style={styles.chartArea}>
+                <Image source={Chart1} containerStyle={styles.chartImage} />
+              </View>
+              <View style={styles.chartArea}>
+                <Image source={Chart2} containerStyle={styles.chartImage} />
+              </View>
+            </View>
+            <View style={styles.projectsContainer}>
+              <Text style={styles.projectsHeader}>List of Projects</Text>
+              <ArrowRight
+                name='arrowright'
+                color='#FEFEFE'
+                size={20}
+                onPress={() => navigation.navigate('Projects')}
+              />
+            </View>
+            {projectsList?.map((item) => {
+              return (
+                <TouchableOpacity
+                  style={styles.project}
+                  key={item.id}
+                  onPress={() => navigation.navigate(`${item.id}`)}
+                >
+                  <Text style={styles.projectTitle}>{item.title}</Text>
+                  <Text style={styles.projectDate}>{item.date}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <TouchableOpacity
-              style={styles.project}
-              key={item.id}
-              onPress={() => navigation.navigate(`${item.id}`)}
+              style={[
+                styles.project,
+                {
+                  height: 200,
+                  padding: 50,
+                },
+              ]}
+              onPress={() => navigation.navigate(`CreateProject`)}
             >
-              <Text style={styles.projectTitle}>{item.title}</Text>
-              <Text style={styles.projectDate}>{item.date}</Text>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  textAlign: 'center',
+                  fontSize: 24,
+                  color: '#F7F7F7',
+                }}
+              >
+                No projects have been initialized yet create project, Create one
+                now!!!
+              </Text>
             </TouchableOpacity>
-          );
-        })}
+          </View>
+        )}
       </View>
     </ScrollView>
   );

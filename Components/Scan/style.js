@@ -39,4 +39,19 @@ export const styles = StyleSheet.create({
     height: 240,
     marginVertical: 50,
   },
+  inviteAndContinue: {
+    width: '100%',
+    paddingVertical: 14,
+    backgroundColor: '#3D1273',
+    borderRadius: 16,
+    textAlign: 'left',
+    marginTop: 20,
+  },
+  buttonTitle: {
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#FEFEFE',
+    textAlign: 'left',
+  },
 });
