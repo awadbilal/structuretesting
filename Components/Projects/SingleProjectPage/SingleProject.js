@@ -4,6 +4,7 @@ import { Button, Input, Text } from 'react-native-elements';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import QRCode from 'react-native-qrcode-svg';
 import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
@@ -88,38 +89,47 @@ const SingleProject = ({ navigation, item, user }) => {
       </View>
       <Text style={styles.devices}>Linked Devices</Text>
       <View style={styles.devicesContainer}>
-        <View style={styles.devicesInnerContainer}>
-          <Text style={styles.devicesNumber}>1</Text>
-          <Text style={styles.devicesUser}>{item?.admin?.name}</Text>
-          <MaterialCommunityIcons name='crown' style={styles.devicesRemove} />
-        </View>
-        <ScrollView>
-          {users
-            ?.filter((usr) => {
-              console.log(usr);
-              return usr.id !== item?.admin?.id;
-            })
-            .map((usr, i) => {
-              return (
-                <View style={styles.devicesInnerContainer} key={i}>
-                  <Text style={styles.devicesNumber}>{i + 2}</Text>
-                  <Text style={styles.devicesUser}>{usr?.name}</Text>
-                  {user?.id == item?.admin?.id ? (
-                    <Text
-                      style={styles.devicesRemove}
-                      onPress={() =>
-                        setUsers(users.filter((id) => id?.id !== usr?.id))
-                      }
-                    >
-                      X
-                    </Text>
-                  ) : (
-                    <Text style={styles.devicesRemove}>✔</Text>
-                  )}
-                </View>
-              );
-            })}
-        </ScrollView>
+        {show ? (
+          <QRCode value={`${item?.id}`} />
+        ) : (
+          <>
+            <View style={styles.devicesInnerContainer}>
+              <Text style={styles.devicesNumber}>1</Text>
+              <Text style={styles.devicesUser}>{item?.admin?.name}</Text>
+              <MaterialCommunityIcons
+                name='crown'
+                style={styles.devicesRemove}
+              />
+            </View>
+            <ScrollView>
+              {users
+                ?.filter((usr) => {
+                  console.log(usr);
+                  return usr.id !== item?.admin?.id;
+                })
+                .map((usr, i) => {
+                  return (
+                    <View style={styles.devicesInnerContainer} key={i}>
+                      <Text style={styles.devicesNumber}>{i + 2}</Text>
+                      <Text style={styles.devicesUser}>{usr?.name}</Text>
+                      {user?.id == item?.admin?.id ? (
+                        <Text
+                          style={styles.devicesRemove}
+                          onPress={() =>
+                            setUsers(users.filter((id) => id?.id !== usr?.id))
+                          }
+                        >
+                          X
+                        </Text>
+                      ) : (
+                        <Text style={styles.devicesRemove}>✔</Text>
+                      )}
+                    </View>
+                  );
+                })}
+            </ScrollView>
+          </>
+        )}
       </View>
       <Button
         type='solid'
