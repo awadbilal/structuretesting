@@ -16,7 +16,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { store } from '../../firebase';
 import { styles } from './style';
 
-const Home = ({ navigation, data, refreshing, setRefreshing }) => {
+const Home = ({ navigation, data, refreshing, setRefreshing, fetchData }) => {
   const [projectsList, setProjectsList] = React.useState(data);
 
   async function editList() {
@@ -44,6 +44,7 @@ const Home = ({ navigation, data, refreshing, setRefreshing }) => {
   };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    fetchData();
     wait(600).then(() => setRefreshing(false));
   }, []);
 
@@ -79,8 +80,8 @@ const Home = ({ navigation, data, refreshing, setRefreshing }) => {
         <View style={styles.projectsContainer}>
           <Text style={styles.projectsHeader}>List of Projects</Text>
           <ArrowRight
-            name='arrowright'
-            color='#FEFEFE'
+            name="arrowright"
+            color="#FEFEFE"
             size={20}
             onPress={() => navigation.navigate('Projects')}
           />

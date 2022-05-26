@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements';
 import { Image } from '@rneui/themed';
 import ScanImage from '../../Assets/Scan.png';
@@ -86,7 +86,7 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
   }, [updateData]);
 
   return (
-    <>
+    <ScrollView>
       {!isReady ? (
         !updateData ? (
           <View style={styles.container}>
@@ -94,8 +94,8 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
               <Text style={styles.title}>Join Project</Text>
             </View>
             <Input
-              placeholder='K4z5mZeFa153'
-              type='text'
+              placeholder="K4z5mZeFa153"
+              type="text"
               value={projectCode}
               onChangeText={(e) => setProjectCode(e)}
               style={{ color: '#FFF' }}
@@ -116,18 +116,18 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
               }
             />
             <Button
-              type='solid'
-              radius='16'
-              title='Join Project'
+              type="solid"
+              radius="16"
+              title="Join Project"
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => handleJoin()}
             />
             <Image source={ScanImage} style={styles.qrcode} />
             <Button
-              type='solid'
-              radius='16'
-              title='Scan QR Code to join instead'
+              type="solid"
+              radius="16"
+              title="Scan QR Code to join instead"
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => console.log('Hello QRCode')}
@@ -156,7 +156,7 @@ const Scan = ({ user, setUser, projectsList, setProjectsList }) => {
           setUpdateData={setUpdateData}
         />
       )}
-    </>
+    </ScrollView>
   );
 };
 

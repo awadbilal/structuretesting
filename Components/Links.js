@@ -110,7 +110,7 @@ const Links = ({ navigation }) => {
           tabBarInactiveTintColor: '#FFFFFF80',
         })}
       >
-        <Tab.Screen name='Home' options={{ headerShown: false }}>
+        <Tab.Screen name="Home" options={{ headerShown: false }}>
           {(props) => (
             <Home
               {...props}
@@ -118,10 +118,11 @@ const Links = ({ navigation }) => {
               user={user}
               refreshing={refreshing}
               setRefreshing={setRefreshing}
+              fetchData={fetchData}
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Projects' options={{ headerShown: false }}>
+        <Tab.Screen name="Projects" options={{ headerShown: false }}>
           {(props) => (
             <Projects
               {...props}
@@ -129,10 +130,11 @@ const Links = ({ navigation }) => {
               user={user}
               refreshing={refreshing}
               setRefreshing={setRefreshing}
+              fetchData={fetchData}
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Scan' options={{ headerShown: false }}>
+        <Tab.Screen name="Scan" options={{ headerShown: false }}>
           {(props) => (
             <Scan
               {...props}
@@ -142,7 +144,7 @@ const Links = ({ navigation }) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Settings' options={{ headerShown: false }}>
+        <Tab.Screen name="Settings" options={{ headerShown: false }}>
           {(props) => <Settings {...props} setUser={setUser} />}
         </Tab.Screen>
       </Tab.Navigator>
@@ -151,7 +153,7 @@ const Links = ({ navigation }) => {
 
   // INTRO contains all the navigation for the introduction pages.
   const INTRO = [
-    <Stack.Screen name='Introduction'>
+    <Stack.Screen name="Introduction">
       {(props) => (
         <Introduction
           {...props}
@@ -168,13 +170,13 @@ const Links = ({ navigation }) => {
     // <Stack.Screen name='Register'>
     //   {(props) => <Register {...props} setUser={setUser} />}
     // </Stack.Screen>,
-    <Stack.Screen name='Register'>
+    <Stack.Screen name="Register">
       {(props) => <EmailRegister {...props} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='Login'>
+    <Stack.Screen name="Login">
       {(props) => <Login {...props} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='Reset'>
+    <Stack.Screen name="Reset">
       {(props) => <ResetPassword {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
   ];
@@ -202,7 +204,7 @@ const Links = ({ navigation }) => {
         </Stack.Screen>
       );
     }),
-    <Stack.Screen name='CreateProject' options={{ headerShown: false }}>
+    <Stack.Screen name="CreateProject" options={{ headerShown: false }}>
       {(props) => (
         <CreateProject
           {...props}
@@ -218,21 +220,21 @@ const Links = ({ navigation }) => {
 
   // Settings contains all the navigation for profile settings, privacy policy, about us, terms & conditions, and Logout sections.
   const SETTINGS = [
-    <Stack.Screen name='ProfileSettings'>
+    <Stack.Screen name="ProfileSettings">
       {(props) => <ProfileSettings {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
     <Stack.Screen
-      name='AboutUs'
+      name="AboutUs"
       component={AboutUs}
       options={{ headerShown: false }}
     />,
     <Stack.Screen
-      name='TermsAndConditions'
+      name="TermsAndConditions"
       component={TermsAndConditions}
       options={{ headerShown: false }}
     />,
     <Stack.Screen
-      name='PrivacyPolicy'
+      name="PrivacyPolicy"
       component={PrivacyPolicy}
       options={{ headerShown: false }}
     />,
@@ -240,11 +242,11 @@ const Links = ({ navigation }) => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
+      <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user && (
           <Stack.Screen
-            name='BottomPanel'
+            name="BottomPanel"
             component={BottomPanel}
             options={{ headerShown: false }}
           />

@@ -40,7 +40,7 @@ const CreateProject = ({
         name: user?.name,
       },
       date: date,
-      levelsNumber: levelsNumber,
+      levels: levelsNumber,
     };
     const docRef = await addDoc(collection(db, 'projects'), data).catch((err) =>
       alert(err)
@@ -98,7 +98,7 @@ const CreateProject = ({
   };
 
   return (
-    <>
+    <ScrollView>
       {!isReady ? (
         !updateData ? (
           <View style={styles.container}>
@@ -106,7 +106,7 @@ const CreateProject = ({
               <View style={{ width: '80%' }}>
                 <Input
                   placeholder={title}
-                  type='text'
+                  type="text"
                   value={title}
                   onChangeText={(e) => setTitle(e)}
                   style={styles.font}
@@ -115,8 +115,8 @@ const CreateProject = ({
                   inputContainerStyle={styles.input}
                   leftIcon={
                     <AntDesign
-                      name='arrowleft'
-                      color='#F7F7F7'
+                      name="arrowleft"
+                      color="#F7F7F7"
                       size={20}
                       style={{ marginRight: 10 }}
                       onPress={() => navigation.goBack()}
@@ -129,7 +129,7 @@ const CreateProject = ({
               <Text style={styles.levelsText}>Number of Levels</Text>
               <Input
                 placeholder={`${levelsNumber}`}
-                type='text'
+                type="text"
                 value={`${levelsNumber}`}
                 onChangeText={(e) => setLevelsNumber(e)}
                 style={{
@@ -154,7 +154,7 @@ const CreateProject = ({
                 <Text style={styles.devicesNumber}>1</Text>
                 <Text style={styles.devicesUser}>{user?.name}</Text>
                 <MaterialCommunityIcons
-                  name='crown'
+                  name="crown"
                   style={styles.devicesRemove}
                 />
               </View>
@@ -180,16 +180,16 @@ const CreateProject = ({
               </ScrollView>
             </View>
             <Button
-              type='solid'
-              radius='16'
+              type="solid"
+              radius="16"
               title={show ? projectCode : 'Invite Others'}
               iconRight={true}
               icon={
                 show ? (
                   <MaterialCommunityIcons
-                    name='link-variant'
+                    name="link-variant"
                     size={25}
-                    color='#FEFEFE'
+                    color="#FEFEFE"
                   />
                 ) : null
               }
@@ -199,9 +199,9 @@ const CreateProject = ({
               onPress={() => handleInvite()}
             />
             <Button
-              type='solid'
-              radius='16'
-              title='Save and Continue To Record Data'
+              type="solid"
+              radius="16"
+              title="Save and Continue To Record Data"
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}
@@ -223,9 +223,9 @@ const CreateProject = ({
               check your project
             </Text>
             <Button
-              type='solid'
-              radius='16'
-              title='View project'
+              type="solid"
+              radius="16"
+              title="View project"
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}
@@ -241,7 +241,7 @@ const CreateProject = ({
           setUpdateData={setUpdateData}
         />
       )}
-    </>
+    </ScrollView>
   );
 };
 

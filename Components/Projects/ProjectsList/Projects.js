@@ -9,7 +9,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input, Text } from 'react-native-elements';
 import { styles } from './style';
 
-const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
+const Projects = ({
+  navigation,
+  data,
+  refreshing,
+  setRefreshing,
+  fetchData,
+}) => {
   const [search, setSearch] = React.useState('');
   const [projectsList, setProjectsList] = React.useState(data);
 
@@ -23,6 +29,7 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
   };
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    fetchData();
     wait(600).then(() => setRefreshing(false));
   }, []);
 
@@ -37,23 +44,23 @@ const Projects = ({ navigation, data, refreshing, setRefreshing }) => {
         <View style={styles.header}>
           <Text style={styles.title}>Projects List</Text>
           <Ionicons
-            name='add'
-            color='#FEFEFE'
+            name="add"
+            color="#FEFEFE"
             size={30}
             onPress={() => navigation.navigate('CreateProject')}
           />
         </View>
         <Input
-          placeholder='Search Projects...'
-          type='text'
+          placeholder="Search Projects..."
+          type="text"
           value={search}
           onChangeText={(e) => setSearch(e)}
           inputContainerStyle={styles.searchBar}
           containerStyle={{ width: '100%' }}
           leftIcon={
             <Ionicons
-              name='search'
-              color='#FEFEFE'
+              name="search"
+              color="#FEFEFE"
               size={20}
               style={{ marginHorizontal: 10 }}
             />
