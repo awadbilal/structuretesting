@@ -4,6 +4,7 @@ import { Button, Input, Text } from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RecordData from '../RecordData/RecordData';
+import QRCode from 'react-native-qrcode-svg';
 import { doc, addDoc, updateDoc, collection, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from '../SingleProjectPage/style';
@@ -107,7 +108,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               <View style={{ width: '80%' }}>
                 <Input
                   placeholder={title}
-                  type='text'
+                  type="text"
                   value={title}
                   onChangeText={(e) => setTitle(e)}
                   style={styles.font}
@@ -116,8 +117,8 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
                   inputContainerStyle={styles.input}
                   leftIcon={
                     <AntDesign
-                      name='arrowleft'
-                      color='#F7F7F7'
+                      name="arrowleft"
+                      color="#F7F7F7"
                       size={20}
                       style={{ marginRight: 10 }}
                       onPress={() => navigation.goBack()}
@@ -130,7 +131,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               <Text style={styles.levelsText}>Number of Levels</Text>
               <Input
                 placeholder={`${levelsNumber}`}
-                type='text'
+                type="text"
                 value={`${levelsNumber}`}
                 onChangeText={(e) => setLevelsNumber(e)}
                 style={{
@@ -151,46 +152,58 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
             </View>
             <Text style={styles.devices}>Linked Devices</Text>
             <View style={styles.devicesContainer}>
-              <View style={styles.devicesInnerContainer}>
-                <Text style={styles.devicesNumber}>1</Text>
-                <Text style={styles.devicesUser}>{user?.name}</Text>
-                <MaterialCommunityIcons
-                  name='crown'
-                  style={styles.devicesRemove}
+              {show ? (
+                <QRCode
+                  size={250}
+                  value={projectCode}
+                  style={{ width: '100%', height: '100%' }}
                 />
-              </View>
-              <ScrollView>
-                {users
-                  ?.filter((usr) => usr !== item?.admin?.id)
-                  .map((usr, i) => {
-                    return (
-                      <View style={styles.devicesInnerContainer} key={i}>
-                        <Text style={styles.devicesNumber}>{i + 2}</Text>
-                        <Text style={styles.devicesUser}>{usr?.name}</Text>
-                        <Text
-                          style={styles.devicesRemove}
-                          onPress={() =>
-                            setUsers(users.filter((id) => id?.id !== usr?.id))
-                          }
-                        >
-                          X
-                        </Text>
-                      </View>
-                    );
-                  })}
-              </ScrollView>
+              ) : (
+                <>
+                  <View style={styles.devicesInnerContainer}>
+                    <Text style={styles.devicesNumber}>1</Text>
+                    <Text style={styles.devicesUser}>{user?.name}</Text>
+                    <MaterialCommunityIcons
+                      name="crown"
+                      style={styles.devicesRemove}
+                    />
+                  </View>
+                  <ScrollView>
+                    {users
+                      ?.filter((usr) => usr !== item?.admin?.id)
+                      .map((usr, i) => {
+                        return (
+                          <View style={styles.devicesInnerContainer} key={i}>
+                            <Text style={styles.devicesNumber}>{i + 2}</Text>
+                            <Text style={styles.devicesUser}>{usr?.name}</Text>
+                            <Text
+                              style={styles.devicesRemove}
+                              onPress={() =>
+                                setUsers(
+                                  users.filter((id) => id?.id !== usr?.id)
+                                )
+                              }
+                            >
+                              X
+                            </Text>
+                          </View>
+                        );
+                      })}
+                  </ScrollView>
+                </>
+              )}
             </View>
             <Button
-              type='solid'
-              radius='16'
+              type="solid"
+              radius="16"
               title={show ? projectCode : 'Invite Others'}
               iconRight={true}
               icon={
                 show ? (
                   <MaterialCommunityIcons
-                    name='link-variant'
+                    name="link-variant"
                     size={25}
-                    color='#FEFEFE'
+                    color="#FEFEFE"
                   />
                 ) : null
               }
@@ -200,9 +213,9 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               onPress={() => handleInvite()}
             />
             <Button
-              type='solid'
-              radius='16'
-              title='Save and Continue To Record Data'
+              type="solid"
+              radius="16"
+              title="Save and Continue To Record Data"
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}
@@ -224,9 +237,9 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               check your project
             </Text>
             <Button
-              type='solid'
-              radius='16'
-              title='View projects list'
+              type="solid"
+              radius="16"
+              title="View projects list"
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}

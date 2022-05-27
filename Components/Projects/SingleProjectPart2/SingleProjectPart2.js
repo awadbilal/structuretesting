@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Linechart } from '../Charts/Charts';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { ref, getDownloadURL, uploadBytes, getStorage } from 'firebase/storage';
 import { db, store } from '../../../firebase';
@@ -27,9 +28,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
     data3 = [
       { label: 'Project Design', value: 0 },
       { label: 'Gyroscope Line Chart', value: 1 },
-      { label: 'Gyroscope Bar Chart', value: 2 },
-      { label: 'Accelerometer Line Chart', value: 3 },
-      { label: 'Accelerometer Bar Chart', value: 4 },
+      { label: 'Accelerometer Line Chart', value: 2 },
     ];
 
   for (let i = 0; i < item?.levels; i++) {
@@ -134,7 +133,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           <View style={{ width: '80%' }}>
             <Input
               placeholder={item?.title}
-              type='text'
+              type="text"
               value={item?.title}
               style={styles.font}
               containerStyle={{ backgroundColor: 'transparent' }}
@@ -142,8 +141,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               inputContainerStyle={styles.input}
               leftIcon={
                 <AntDesign
-                  name='arrowleft'
-                  color='#F7F7F7'
+                  name="arrowleft"
+                  color="#F7F7F7"
                   size={20}
                   style={{ marginRight: 10 }}
                   onPress={() => navigation.goBack()}
@@ -155,8 +154,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           <View style={{ width: '20%' }}>
             {item?.admin?.id === user?.id && (
               <MaterialIcons
-                name='delete-forever'
-                color='#F7F7F7'
+                name="delete-forever"
+                color="#F7F7F7"
                 size={20}
                 style={{ position: 'relative', top: -13 }}
                 onPress={() => handleDelete()}
@@ -173,8 +172,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               containerStyle={styles.dropdownList}
               iconColor={'#FFFFFF'}
               data={data2}
-              labelField='label'
-              valueField='value'
+              labelField="label"
+              valueField="value"
               value={valueDevice}
               onChange={(item) => {
                 setValueDevice(item.value);
@@ -189,8 +188,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               containerStyle={styles.dropdownList}
               iconColor={'#FFFFFF'}
               data={data1}
-              labelField='label'
-              valueField='value'
+              labelField="label"
+              valueField="value"
               value={valueLevel}
               onChange={(item) => {
                 setValueLevel(item.value);
@@ -214,8 +213,8 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           containerStyle={styles.dropdownList}
           iconColor={'#FFFFFF'}
           data={data3}
-          labelField='label'
-          valueField='value'
+          labelField="label"
+          valueField="value"
           value={mainArea}
           onChange={(item) => {
             setMainArea(item.value);
@@ -241,19 +240,17 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
                 No data has been recorded yet
               </Text>
             )}
-          {mainArea === 1 && <Text>Gyroscope Line Chart</Text>}
-          {mainArea === 2 && <Text>Gyroscope Bar Chart</Text>}
-          {mainArea === 3 && <Text>Accelerometer Line Chart</Text>}
-          {mainArea === 4 && <Text>Accelerometer Bar Chart</Text>}
+          {mainArea === 1 && <Linechart info={levelData.gyroscope} />}
+          {mainArea === 2 && <Linechart info={levelData.accelerometer} />}
         </View>
         {mainArea === 0 && !item?.image && (
           <Button
-            type='solid'
-            radius='16'
-            title='Upload Project Design'
+            type="solid"
+            radius="16"
+            title="Upload Project Design"
             iconRight={true}
             icon={
-              <MaterialCommunityIcons name='upload' size={25} color='#FEFEFE' />
+              <MaterialCommunityIcons name="upload" size={25} color="#FEFEFE" />
             }
             titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
             buttonStyle={{ backgroundColor: '#3D1273' }}

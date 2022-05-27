@@ -42,7 +42,6 @@ const Home = ({
 
   React.useEffect(() => {
     editList();
-    fetchData();
     projectsList[0]?.image && fetchImage();
   }, []);
 
@@ -92,8 +91,8 @@ const Home = ({
             <View style={styles.projectsContainer}>
               <Text style={styles.projectsHeader}>List of Projects</Text>
               <ArrowRight
-                name='arrowright'
-                color='#FEFEFE'
+                name="arrowright"
+                color="#FEFEFE"
                 size={20}
                 onPress={() => navigation.navigate('Projects')}
               />

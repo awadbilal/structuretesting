@@ -69,7 +69,6 @@ export const styles = StyleSheet.create({
   selectedTextStyle: {
     backgroundColor: 'transparent',
     fontSize: 16,
-    color: '#F7F7F7',
   },
   infoContainer: {
     alignItems: 'center',
