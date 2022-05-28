@@ -1,23 +1,19 @@
 import { Platform, View, ImageBackground, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Input, Text, Button } from 'react-native-elements';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Text, Button } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Linechart } from '../Charts/Charts';
-import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { ref, getDownloadURL, uploadBytes, getStorage } from 'firebase/storage';
 import { db, store } from '../../../firebase';
 import { styles } from './style';
+import DropDowns from './DropDowns';
 
 const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
   // For dropdown selection:
   const [valueDevice, setValueDevice] = useState(0);
   const [valueLevel, setValueLevel] = useState(0);
-
-  // For Data handling itself
   const [deviceData, setDeviceData] = useState();
   const [levelData, setLevelData] = useState();
   const [mainArea, setMainArea] = useState(0);
@@ -87,25 +83,6 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
     deviceData && setLevelData(deviceData?.levels[valueLevel]);
   }, [valueLevel]);
 
-  const handleDelete = async () => {
-    // Function to handle deleting the project
-    const newProjects = user?.projects?.filter((pr) => pr !== item?.id);
-    await updateDoc(doc(db, 'users', user?.id), {
-      projects: newProjects,
-    })
-      .then(async () => {
-        setUser({
-          ...user,
-          projects: [...user?.projects.filter((pr) => pr !== item?.id)],
-        });
-        await deleteDoc(doc(db, 'projects', item?.id)).catch((err) =>
-          alert(err)
-        );
-        navigation.replace('Projects');
-      })
-      .catch((err) => alert(err));
-  };
-
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -129,96 +106,20 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={{ width: '80%' }}>
-            <Input
-              placeholder={item?.title}
-              type="text"
-              value={item?.title}
-              style={styles.font}
-              containerStyle={{ backgroundColor: 'transparent' }}
-              inputStyle={{ backgroundColor: 'transparent' }}
-              inputContainerStyle={styles.input}
-              leftIcon={
-                <AntDesign
-                  name="arrowleft"
-                  color="#F7F7F7"
-                  size={20}
-                  style={{ marginRight: 10 }}
-                  onPress={() => navigation.goBack()}
-                />
-              }
-              disabled={true}
-            />
-          </View>
-          <View style={{ width: '20%' }}>
-            {item?.admin?.id === user?.id && (
-              <MaterialIcons
-                name="delete-forever"
-                color="#F7F7F7"
-                size={20}
-                style={{ position: 'relative', top: -13 }}
-                onPress={() => handleDelete()}
-              />
-            )}
-          </View>
-        </View>
-        <View style={styles.dropdownContainer}>
-          <View style={styles.dropdownArea}>
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              containerStyle={styles.dropdownList}
-              iconColor={'#FFFFFF'}
-              data={data2}
-              labelField="label"
-              valueField="value"
-              value={valueDevice}
-              onChange={(item) => {
-                setValueDevice(item.value);
-              }}
-            />
-          </View>
-          <View style={styles.dropdownArea}>
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              containerStyle={styles.dropdownList}
-              iconColor={'#FFFFFF'}
-              data={data1}
-              labelField="label"
-              valueField="value"
-              value={valueLevel}
-              onChange={(item) => {
-                setValueLevel(item.value);
-              }}
-            />
-          </View>
-        </View>
-        <Dropdown
-          style={{ width: '100%', backgroundColor: 'transparent' }}
-          placeholderStyle={{
-            color: '#FFFFFF',
-            fontSize: 20,
-            lineHeight: 20,
-            backgroundColor: 'transparent',
-          }}
-          selectedTextStyle={[
-            styles.selectedTextStyle,
-            { fontSize: 20, lineHeight: 20 },
-          ]}
-          maxHeight={320}
-          containerStyle={styles.dropdownList}
-          iconColor={'#FFFFFF'}
-          data={data3}
-          labelField="label"
-          valueField="value"
-          value={mainArea}
-          onChange={(item) => {
-            setMainArea(item.value);
-          }}
+        <DropDowns
+          navigation={navigation}
+          user={user}
+          setUser={setUser}
+          item={item}
+          data1={data1}
+          data2={data2}
+          data3={data3}
+          mainArea={mainArea}
+          setMainArea={setMainArea}
+          valueLevel={valueLevel}
+          valueDevice={valueDevice}
+          setValueLevel={setValueLevel}
+          setValueDevice={setValueDevice}
         />
         <View style={styles.infoContainer}>
           {mainArea === 0 && (
@@ -240,10 +141,26 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
                 No data has been recorded yet
               </Text>
             )}
-          {mainArea === 1 && <Linechart info={levelData.gyroscope} />}
-          {mainArea === 2 && <Linechart info={levelData.accelerometer} />}
+          {mainArea === 1 && (
+            <Linechart
+              info={levelData.gyroscope}
+              height={300}
+              width={300}
+              decimalPlaces={4}
+              dotSize="3"
+            />
+          )}
+          {mainArea === 2 && (
+            <Linechart
+              info={levelData.accelerometer}
+              height={300}
+              width={300}
+              decimalPlaces={4}
+              dotSize="3"
+            />
+          )}
         </View>
-        {mainArea === 0 && !item?.image && (
+        {mainArea === 0 && !item?.image && user.id === item?.admin.id && (
           <Button
             type="solid"
             radius="16"

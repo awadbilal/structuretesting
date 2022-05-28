@@ -59,6 +59,13 @@ const EmailRegister = ({ navigation, setUser }) => {
           ...formData,
           projects: [],
         });
+        await AsyncStorage.setItem(
+          'user',
+          JSON.stringify({
+            id: docRef.id,
+            ...formData,
+          })
+        );
         await setUser({
           ...formData,
           id: docRef.id,

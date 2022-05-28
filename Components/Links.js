@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,12 +7,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDoc, getDocs } from 'firebase/firestore';
 import '../firebase';
+import { AsyncStorage } from 'react-native';
 
 // Main Components
-import Home from './HomePage/Home';
-import Projects from './Projects/ProjectsList/Projects';
+import Home from './HomePage/Index';
+import Projects from './Projects/ProjectsList/Index';
 import Scan from './Scan/Scan';
 import Settings from './Settings/Settings';
 
@@ -39,11 +41,10 @@ const Tab = createBottomTabNavigator();
 
 const Links = ({ navigation }) => {
   // States to check if we have a user logged in, as well as if they passed the introduction
-  const [user, setUser] = React.useState();
-  const [intro, setIntro] = React.useState(false);
-  const [projectsList, setProjectsList] = React.useState([]);
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [update, setUpdate] = React.useState(false);
+  const [user, setUser] = useState();
+  const [intro, setIntro] = useState(false);
+  const [projectsList, setProjectsList] = useState([]);
+  const [update, setUpdate] = useState(false);
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
@@ -52,9 +53,7 @@ const Links = ({ navigation }) => {
     const newArr = [];
     await projectsSnapshot?.forEach((doc) => {
       if (!!user) {
-        user?.projects?.forEach((pr) => {
-          pr === doc?.id && newArr.push({ id: doc.id, ...doc.data() });
-        });
+        newArr.push({ id: doc.id, ...doc.data() });
       }
     });
     newArr.sort((a, b) => {
@@ -67,9 +66,18 @@ const Links = ({ navigation }) => {
     await setProjectsList(newArr);
   }
 
-  React.useEffect(() => {
-    fetchData();
-  }, [refreshing, user, update]);
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUser(JSON.parse(value));
+      }
+    })();
+  }, []);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [refreshing, update]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -110,31 +118,27 @@ const Links = ({ navigation }) => {
           tabBarInactiveTintColor: '#FFFFFF80',
         })}
       >
-        <Tab.Screen name='Home' options={{ headerShown: false }}>
+        <Tab.Screen name="Home" options={{ headerShown: false }}>
           {(props) => (
             <Home
               {...props}
-              data={projectsList.slice(0, 10)}
+              data={projectsList}
               user={user}
-              refreshing={refreshing}
-              setRefreshing={setRefreshing}
               fetchData={fetchData}
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Projects' options={{ headerShown: false }}>
+        <Tab.Screen name="Projects" options={{ headerShown: false }}>
           {(props) => (
             <Projects
               {...props}
               data={projectsList}
               user={user}
-              refreshing={refreshing}
-              setRefreshing={setRefreshing}
               fetchData={fetchData}
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Scan' options={{ headerShown: false }}>
+        <Tab.Screen name="Scan" options={{ headerShown: false }}>
           {(props) => (
             <Scan
               {...props}
@@ -144,7 +148,7 @@ const Links = ({ navigation }) => {
             />
           )}
         </Tab.Screen>
-        <Tab.Screen name='Settings' options={{ headerShown: false }}>
+        <Tab.Screen name="Settings" options={{ headerShown: false }}>
           {(props) => <Settings {...props} setUser={setUser} />}
         </Tab.Screen>
       </Tab.Navigator>
@@ -153,7 +157,7 @@ const Links = ({ navigation }) => {
 
   // INTRO contains all the navigation for the introduction pages.
   const INTRO = [
-    <Stack.Screen name='Introduction'>
+    <Stack.Screen name="Introduction">
       {(props) => (
         <Introduction
           {...props}
@@ -170,13 +174,13 @@ const Links = ({ navigation }) => {
     // <Stack.Screen name='Register'>
     //   {(props) => <Register {...props} setUser={setUser} />}
     // </Stack.Screen>,
-    <Stack.Screen name='Register'>
+    <Stack.Screen name="Register">
       {(props) => <EmailRegister {...props} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='Login'>
+    <Stack.Screen name="Login">
       {(props) => <Login {...props} setUser={setUser} />}
     </Stack.Screen>,
-    <Stack.Screen name='Reset'>
+    <Stack.Screen name="Reset">
       {(props) => <ResetPassword {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
   ];
@@ -204,7 +208,7 @@ const Links = ({ navigation }) => {
         </Stack.Screen>
       );
     }),
-    <Stack.Screen name='CreateProject' options={{ headerShown: false }}>
+    <Stack.Screen name="CreateProject" options={{ headerShown: false }}>
       {(props) => (
         <CreateProject
           {...props}
@@ -219,21 +223,21 @@ const Links = ({ navigation }) => {
 
   // Settings contains all the navigation for profile settings, privacy policy, about us, terms & conditions, and Logout sections.
   const SETTINGS = [
-    <Stack.Screen name='ProfileSettings'>
+    <Stack.Screen name="ProfileSettings">
       {(props) => <ProfileSettings {...props} user={user} setUser={setUser} />}
     </Stack.Screen>,
     <Stack.Screen
-      name='AboutUs'
+      name="AboutUs"
       component={AboutUs}
       options={{ headerShown: false }}
     />,
     <Stack.Screen
-      name='TermsAndConditions'
+      name="TermsAndConditions"
       component={TermsAndConditions}
       options={{ headerShown: false }}
     />,
     <Stack.Screen
-      name='PrivacyPolicy'
+      name="PrivacyPolicy"
       component={PrivacyPolicy}
       options={{ headerShown: false }}
     />,
@@ -241,11 +245,11 @@ const Links = ({ navigation }) => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar backgroundColor='#10A9B0' barStyle='light-content' />
+      <StatusBar backgroundColor="#10A9B0" barStyle="light-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {user && (
           <Stack.Screen
-            name='BottomPanel'
+            name="BottomPanel"
             component={BottomPanel}
             options={{ headerShown: false }}
           />

@@ -1,9 +1,8 @@
 import { View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { LineChart, BarChart } from 'react-native-chart-kit';
-import Svg, { Circle, Path, Rect } from 'react-native-svg';
+import { LineChart } from 'react-native-chart-kit';
 
-export const Linechart = ({ info }) => {
+export const Linechart = ({ info, height, width, decimalPlaces, dotSize }) => {
   const [xData, setXData] = useState([]);
   const [yData, setYData] = useState([]);
   const [zData, setZData] = useState([]);
@@ -27,7 +26,6 @@ export const Linechart = ({ info }) => {
   return (
     <LineChart
       data={{
-        labels: ['X', 'Y', 'Z'],
         datasets: [
           {
             data: xData,
@@ -49,33 +47,32 @@ export const Linechart = ({ info }) => {
       withShadow={false}
       withInnerLines={false}
       withOuterLines={false}
-      width={300}
-      height={300}
+      width={width}
+      height={height}
       yAxisInterval={1}
       chartConfig={{
         backgroundColor: 'transparent',
         backgroundGradientFrom: '#3D1273',
         backgroundGradientTo: '#3D1273',
-        decimalPlaces: 4,
+        decimalPlaces: decimalPlaces,
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
           borderRadius: 16,
         },
         propsForDots: {
-          r: '3',
+          r: dotSize,
           strokeWidth: '1',
           stroke: '#FFFFFF',
         },
       }}
       bezier
       style={{
+        paddingBottom: 0,
+        paddingLeft: 0,
+        marginLeft: 0,
         borderRadius: 16,
       }}
     />
   );
-};
-
-export const Barchart = () => {
-  return <BarChart />;
 };

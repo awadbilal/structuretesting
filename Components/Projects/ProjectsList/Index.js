@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   RefreshControl,
@@ -9,25 +9,30 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input, Text } from 'react-native-elements';
 import { styles } from './style';
 
-const Projects = ({
-  navigation,
-  data,
-  refreshing,
-  setRefreshing,
-  fetchData,
-}) => {
-  const [search, setSearch] = React.useState('');
-  const [projectsList, setProjectsList] = React.useState(data);
+const Index = ({ navigation, user, data, fetchData }) => {
+  const [search, setSearch] = useState('');
+  const [projects, setProjects] = useState(data);
+  const [refreshing, setRefreshing] = useState(false);
 
+  // Filtering the projects according to user
   useEffect(() => {
-    setProjectsList(data?.filter((item) => item?.title?.includes(search)));
+    if (Array.isArray(user.projects) && user.projects.length !== 0) {
+      setProjects(projects.filter(({ id }) => user?.projects.includes(id)));
+    } else setProjects();
+  }, [data, refreshing]);
+
+  // Filtering the projects according to title
+  useEffect(() => {
+    if (Array.isArray(projects) && projects.length !== 0) {
+      setProjects(projects?.filter((item) => item?.title?.includes(search)));
+    }
   }, [search]);
 
   // For refreshing the page by swiping down
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
     wait(600).then(() => setRefreshing(false));
@@ -66,25 +71,27 @@ const Projects = ({
             />
           }
         />
-        {projectsList?.map((item) => {
-          return (
-            <TouchableOpacity
-              style={styles.project}
-              key={item?.id}
-              onPress={() => navigation.navigate(`${item.id}`)}
-            >
-              <Text style={styles.projectTitle}>{item?.title}</Text>
-              <Text style={styles.projectNumbers}>{item?.levels} Levels</Text>
-              <Text style={styles.projectDate}>{item?.date}</Text>
-              <Text style={styles.projectNumbers}>
-                {item?.users?.length} Devices
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
+        {Array.isArray(projects) &&
+          projects.length !== 0 &&
+          projects?.map((item) => {
+            return (
+              <TouchableOpacity
+                style={styles.project}
+                key={item?.id}
+                onPress={() => navigation.navigate(`${item.id}`)}
+              >
+                <Text style={styles.projectTitle}>{item?.title}</Text>
+                <Text style={styles.projectNumbers}>{item?.levels} Levels</Text>
+                <Text style={styles.projectDate}>{item?.date}</Text>
+                <Text style={styles.projectNumbers}>
+                  {item?.users?.length} Devices
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
       </View>
     </ScrollView>
   );
 };
 
-export default Projects;
+export default Index;

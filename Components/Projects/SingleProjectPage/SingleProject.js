@@ -137,25 +137,27 @@ const SingleProject = ({ navigation, item, user }) => {
             </>
           )}
         </View>
-        <Button
-          type="solid"
-          radius="16"
-          title={show ? item?.id : 'Invite Others'}
-          iconRight={true}
-          icon={
-            show ? (
-              <MaterialCommunityIcons
-                name="link-variant"
-                size={25}
-                color="#FEFEFE"
-              />
-            ) : null
-          }
-          titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
-          buttonStyle={{ backgroundColor: '#3D1273' }}
-          containerStyle={styles.inviteAndContinue}
-          onPress={() => handleInvite()}
-        />
+        {user.id === item?.admin.id && (
+          <Button
+            type="solid"
+            radius="16"
+            title={show ? item?.id : 'Invite Others'}
+            iconRight={true}
+            icon={
+              show ? (
+                <MaterialCommunityIcons
+                  name="link-variant"
+                  size={25}
+                  color="#FEFEFE"
+                />
+              ) : null
+            }
+            titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
+            buttonStyle={{ backgroundColor: '#3D1273' }}
+            containerStyle={styles.inviteAndContinue}
+            onPress={() => handleInvite()}
+          />
+        )}
         <Button
           type="solid"
           radius="16"

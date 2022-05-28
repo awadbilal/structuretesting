@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { AsyncStorage, ScrollView, View } from 'react-native';
 import React from 'react';
 import { Text, Button } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -154,8 +154,8 @@ const Settings = ({ navigation, setUser }) => {
                   borderRadius: 16,
                 }}
                 onPress={() => {
+                  AsyncStorage.removeItem('user');
                   setUser();
-                  alert('User has been logged out');
                   navigation.navigate('Register');
                 }}
               />

@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#FEFEFE',
     position: 'absolute',
-    left: 30,
+    left: 60,
     top: 60,
   },
   chartsContainer: {

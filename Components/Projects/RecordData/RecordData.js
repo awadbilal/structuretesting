@@ -26,16 +26,16 @@ const RecordData = ({
   const _subscribe = () => {
     setSubscriptionAcc(
       Accelerometer.addListener((accelerometerData) => {
-        xAcc.push(Math.round(accelerometerData.x * 10000000) / 10000000);
-        yAcc.push(Math.round(accelerometerData.y * 10000000) / 10000000);
-        zAcc.push(Math.round(accelerometerData.z * 10000000) / 10000000);
+        xAcc.push(Math.round(accelerometerData.x * 1000000) / 1000000);
+        yAcc.push(Math.round(accelerometerData.y * 1000000) / 1000000);
+        zAcc.push(Math.round(accelerometerData.z * 1000000) / 1000000);
       })
     );
     setSubscriptionGyr(
       Gyroscope.addListener((gyroscopeData) => {
-        xGyro.push(Math.round(gyroscopeData.x * 10000000) / 10000000);
-        yGyro.push(Math.round(gyroscopeData.y * 10000000) / 10000000);
-        zGyro.push(Math.round(gyroscopeData.z * 10000000) / 10000000);
+        xGyro.push(Math.round(gyroscopeData.x * 1000000) / 1000000);
+        yGyro.push(Math.round(gyroscopeData.y * 1000000) / 1000000);
+        zGyro.push(Math.round(gyroscopeData.z * 1000000) / 1000000);
       })
     );
   };
@@ -78,16 +78,16 @@ const RecordData = ({
         <View style={styles.header}>
           <View style={{ width: '80%' }}>
             <Input
-              placeholder=''
-              type='text'
-              value=''
+              placeholder=""
+              type="text"
+              value=""
               containerStyle={{ backgroundColor: 'transparent' }}
               inputStyle={{ backgroundColor: 'transparent' }}
               inputContainerStyle={styles.input}
               leftIcon={
                 <AntDesign
-                  name='arrowleft'
-                  color='#F7F7F7'
+                  name="arrowleft"
+                  color="#F7F7F7"
                   size={20}
                   style={{ marginRight: 10 }}
                   onPress={() => setIsReady(false)}
@@ -118,8 +118,8 @@ const RecordData = ({
             <View style={styles.timerContainer}>
               <Text>Seconds to record</Text>
               <Input
-                placeholder='SS'
-                type='number'
+                placeholder="SS"
+                type="number"
                 placeholderTextColor={'#FFFFFF75'}
                 style={{ textAlign: 'left', fontSize: 24, color: '#FFFFFF' }}
                 inputContainerStyle={styles.timerInputContainer}
@@ -127,7 +127,7 @@ const RecordData = ({
                 value={seconds}
                 maxLength={2}
                 onChangeText={(e) => setSeconds(e)}
-                keyboardType='number-pad'
+                keyboardType="number-pad"
               />
             </View>
             <Text>Note that time interval for data is 100 Gigasecond</Text>
