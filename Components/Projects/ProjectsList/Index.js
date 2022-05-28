@@ -11,15 +11,10 @@ import { styles } from './style';
 
 const Index = ({ navigation, user, data, fetchData }) => {
   const [search, setSearch] = useState('');
-  const [projects, setProjects] = useState(data);
+  const [projects, setProjects] = useState(
+    data.filter(({ id }) => user?.projects.includes(id))
+  );
   const [refreshing, setRefreshing] = useState(false);
-
-  // Filtering the projects according to user
-  useEffect(() => {
-    if (Array.isArray(user.projects) && user.projects.length !== 0) {
-      setProjects(projects.filter(({ id }) => user?.projects.includes(id)));
-    } else setProjects();
-  }, [data, refreshing]);
 
   // Filtering the projects according to title
   useEffect(() => {

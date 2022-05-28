@@ -66,6 +66,8 @@ const Links = ({ navigation }) => {
     await setProjectsList(newArr);
   }
 
+  if (projectsList.length === 0) fetchData();
+
   useEffect(() => {
     (async () => {
       const value = await AsyncStorage.getItem('user');
