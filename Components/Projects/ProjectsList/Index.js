@@ -12,7 +12,7 @@ import { styles } from './style';
 const Index = ({ navigation, user, data, fetchData }) => {
   const [search, setSearch] = useState('');
   const [projects, setProjects] = useState(
-    Array.isArray(user.projects) && user.proejcts.length !== 0
+    Array.isArray(user.projects) && user.projects.length !== 0
       ? data.filter(({ id }) => user?.projects.includes(id))
       : []
   );

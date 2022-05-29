@@ -8,7 +8,7 @@ import { styles } from './style';
 
 const Index = ({ navigation, data, user, fetchData }) => {
   const [projects, setProjects] = useState(
-    Array.isArray(user.projects) && user.proejcts.length !== 0
+    Array.isArray(user.projects) && user.projects.length !== 0
       ? data.filter(({ id }) => user?.projects.includes(id))
       : []
   );
