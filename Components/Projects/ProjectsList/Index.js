@@ -12,7 +12,9 @@ import { styles } from './style';
 const Index = ({ navigation, user, data, fetchData }) => {
   const [search, setSearch] = useState('');
   const [projects, setProjects] = useState(
-    data.filter(({ id }) => user?.projects.includes(id))
+    Array.isArray(user.projects) && user.proejcts.length !== 0
+      ? data.filter(({ id }) => user?.projects.includes(id))
+      : []
   );
   const [refreshing, setRefreshing] = useState(false);
 
