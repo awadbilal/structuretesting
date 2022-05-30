@@ -9,7 +9,14 @@ import { doc, addDoc, updateDoc, collection, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from '../SingleProjectPage/style';
 
-const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
+const CreateProject = ({
+  navigation,
+  user,
+  setUser,
+  update,
+  setUpdate,
+  fetchData,
+}) => {
   const [users, setUsers] = useState([]);
   const [title, setTitle] = useState('New Project');
   const [levelsNumber, setLevelsNumber] = useState(1);
@@ -54,6 +61,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
     }).catch((err) => alert(err));
     await setProjectCode(docRef?.id);
     setCounter(counter + 1);
+    fetchData();
   };
 
   useEffect(() => {
@@ -70,6 +78,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
       alert(err)
     );
     setIsReady(true);
+    fetchData();
   }
 
   const uploadData = async () => {
@@ -89,6 +98,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
       ],
     }).catch((err) => alert(err));
     await setUpdate(!update);
+    fetchData();
   };
 
   useEffect(() => {
@@ -108,7 +118,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               <View style={{ width: '80%' }}>
                 <Input
                   placeholder={title}
-                  type="text"
+                  type='text'
                   value={title}
                   onChangeText={(e) => setTitle(e)}
                   style={styles.font}
@@ -117,8 +127,8 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
                   inputContainerStyle={styles.input}
                   leftIcon={
                     <AntDesign
-                      name="arrowleft"
-                      color="#F7F7F7"
+                      name='arrowleft'
+                      color='#F7F7F7'
                       size={20}
                       style={{ marginRight: 10 }}
                       onPress={() => navigation.goBack()}
@@ -131,7 +141,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               <Text style={styles.levelsText}>Number of Levels</Text>
               <Input
                 placeholder={`${levelsNumber}`}
-                type="text"
+                type='text'
                 value={`${levelsNumber}`}
                 onChangeText={(e) => setLevelsNumber(e)}
                 style={{
@@ -164,7 +174,7 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
                     <Text style={styles.devicesNumber}>1</Text>
                     <Text style={styles.devicesUser}>{user?.name}</Text>
                     <MaterialCommunityIcons
-                      name="crown"
+                      name='crown'
                       style={styles.devicesRemove}
                     />
                   </View>
@@ -194,16 +204,16 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               )}
             </View>
             <Button
-              type="solid"
-              radius="16"
+              type='solid'
+              radius='16'
               title={show ? projectCode : 'Invite Others'}
               iconRight={true}
               icon={
                 show ? (
                   <MaterialCommunityIcons
-                    name="link-variant"
+                    name='link-variant'
                     size={25}
-                    color="#FEFEFE"
+                    color='#FEFEFE'
                   />
                 ) : null
               }
@@ -213,9 +223,9 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               onPress={() => handleInvite()}
             />
             <Button
-              type="solid"
-              radius="16"
-              title="Save and Continue To Record Data"
+              type='solid'
+              radius='16'
+              title='Save and Continue To Record Data'
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}
@@ -237,9 +247,9 @@ const CreateProject = ({ navigation, user, setUser, update, setUpdate }) => {
               check your project
             </Text>
             <Button
-              type="solid"
-              radius="16"
-              title="View projects list"
+              type='solid'
+              radius='16'
+              title='View projects list'
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}

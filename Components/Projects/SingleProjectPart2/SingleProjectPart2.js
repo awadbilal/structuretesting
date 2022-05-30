@@ -10,7 +10,7 @@ import { db, store } from '../../../firebase';
 import { styles } from './style';
 import DropDowns from './DropDowns';
 
-const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
+const SingleProjectPart2 = ({ navigation, item, user, setUser, fetchData }) => {
   // For dropdown selection:
   const [valueDevice, setValueDevice] = useState(0);
   const [valueLevel, setValueLevel] = useState(0);
@@ -120,6 +120,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
           valueDevice={valueDevice}
           setValueLevel={setValueLevel}
           setValueDevice={setValueDevice}
+          fetchData={fetchData}
         />
         <View style={styles.infoContainer}>
           {mainArea === 0 && (
@@ -147,7 +148,7 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               height={300}
               width={300}
               decimalPlaces={4}
-              dotSize="3"
+              dotSize='3'
             />
           )}
           {mainArea === 2 && (
@@ -156,18 +157,18 @@ const SingleProjectPart2 = ({ navigation, item, user, setUser }) => {
               height={300}
               width={300}
               decimalPlaces={4}
-              dotSize="3"
+              dotSize='3'
             />
           )}
         </View>
         {mainArea === 0 && !item?.image && user.id === item?.admin.id && (
           <Button
-            type="solid"
-            radius="16"
-            title="Upload Project Design"
+            type='solid'
+            radius='16'
+            title='Upload Project Design'
             iconRight={true}
             icon={
-              <MaterialCommunityIcons name="upload" size={25} color="#FEFEFE" />
+              <MaterialCommunityIcons name='upload' size={25} color='#FEFEFE' />
             }
             titleStyle={[styles.buttonTitle, { marginRight: 20 }]}
             buttonStyle={{ backgroundColor: '#3D1273' }}

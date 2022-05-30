@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StatusBar } from 'expo-status-bar';
 import { db } from '../firebase';
-import { collection, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import '../firebase';
 import { AsyncStorage } from 'react-native';
 
@@ -48,6 +48,18 @@ const Links = ({ navigation }) => {
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
+    // Fetch and update user Info
+    if (user) {
+      const userSnapshot = await getDoc(doc(db, 'users', user.id));
+      const userInfo = await { id: doc.id, ...userSnapshot.data() };
+      setUser(userInfo);
+      try {
+        AsyncStorage.setItem('user', JSON.stringify(userInfo));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     // Fetching Projects List
     const projectsSnapshot = await getDocs(collection(db, 'projects'));
     const newArr = [];
@@ -192,7 +204,14 @@ const Links = ({ navigation }) => {
     projectsList?.map((item) => {
       return (
         <Stack.Screen key={`${item?.id}part1`} name={`${item?.id}`}>
-          {(props) => <SingleProject {...props} item={item} user={user} />}
+          {(props) => (
+            <SingleProject
+              {...props}
+              item={item}
+              user={user}
+              fetchData={fetchData}
+            />
+          )}
         </Stack.Screen>
       );
     }),
@@ -205,6 +224,7 @@ const Links = ({ navigation }) => {
               user={user}
               item={item}
               setUser={setUser}
+              fetchData={fetchData}
             />
           )}
         </Stack.Screen>
@@ -218,6 +238,7 @@ const Links = ({ navigation }) => {
           setUser={setUser}
           update={update}
           setUpdate={setUpdate}
+          fetchData={fetchData}
         />
       )}
     </Stack.Screen>,

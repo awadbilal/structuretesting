@@ -9,7 +9,7 @@ import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
 
-const SingleProject = ({ navigation, item, user }) => {
+const SingleProject = ({ navigation, item, user, fetchData }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [users, setUsers] = useState(
     Array.isArray(item?.users) && item?.users.length !== 0 ? item.users : []
@@ -22,6 +22,7 @@ const SingleProject = ({ navigation, item, user }) => {
     await updateDoc(doc(db, 'projects', item.id), {
       title: title,
     });
+    fetchData();
   };
 
   const handleUsers = async (userId) => {
@@ -34,6 +35,7 @@ const SingleProject = ({ navigation, item, user }) => {
     await updateDoc(doc(db, 'projects', item.id), {
       users: users.filter((usr) => usr?.id !== userId),
     });
+    fetchData();
   };
 
   const handleInvite = () => {

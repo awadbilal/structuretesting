@@ -22,6 +22,7 @@ const DropDowns = ({
   valueDevice,
   setValueLevel,
   setValueDevice,
+  fetchData,
 }) => {
   const handleDelete = async () => {
     // Function to handle deleting the project
@@ -38,6 +39,7 @@ const DropDowns = ({
       projects: [...user?.projects.filter((pr) => pr !== item?.id)],
     });
     await deleteDoc(doc(db, 'projects', item?.id)).catch((err) => alert(err));
+    fetchData();
     navigation.pop(2);
   };
 
@@ -47,7 +49,7 @@ const DropDowns = ({
         <View style={{ width: '80%' }}>
           <Input
             placeholder={item?.title}
-            type="text"
+            type='text'
             value={item?.title}
             style={styles.font}
             containerStyle={{ backgroundColor: 'transparent' }}
@@ -55,8 +57,8 @@ const DropDowns = ({
             inputContainerStyle={styles.input}
             leftIcon={
               <AntDesign
-                name="arrowleft"
-                color="#F7F7F7"
+                name='arrowleft'
+                color='#F7F7F7'
                 size={20}
                 style={{ marginRight: 10 }}
                 onPress={() => navigation.goBack()}
@@ -68,8 +70,8 @@ const DropDowns = ({
         <View style={{ width: '20%' }}>
           {item?.admin?.id === user?.id && (
             <MaterialIcons
-              name="delete-forever"
-              color="#F7F7F7"
+              name='delete-forever'
+              color='#F7F7F7'
               size={20}
               style={{ position: 'relative', top: -13 }}
               onPress={() => handleDelete()}
@@ -86,8 +88,8 @@ const DropDowns = ({
             containerStyle={styles.dropdownList}
             iconColor={'#FFFFFF'}
             data={data2}
-            labelField="label"
-            valueField="value"
+            labelField='label'
+            valueField='value'
             value={valueDevice}
             onChange={(item) => {
               setValueDevice(item.value);
@@ -102,8 +104,8 @@ const DropDowns = ({
             containerStyle={styles.dropdownList}
             iconColor={'#FFFFFF'}
             data={data1}
-            labelField="label"
-            valueField="value"
+            labelField='label'
+            valueField='value'
             value={valueLevel}
             onChange={(item) => {
               setValueLevel(item.value);
@@ -127,8 +129,8 @@ const DropDowns = ({
         containerStyle={styles.dropdownList}
         iconColor={'#FFFFFF'}
         data={data3}
-        labelField="label"
-        valueField="value"
+        labelField='label'
+        valueField='value'
         value={mainArea}
         onChange={(item) => {
           setMainArea(item.value);
