@@ -4,7 +4,7 @@ import Logo from '../../Assets/logo.png';
 import Intro1 from '../../Assets/intro1.png';
 import Intro2 from '../../Assets/intro2.png';
 import Intro3 from '../../Assets/intro3.png';
-
+import { AsyncStorage } from 'react-native';
 import CustomCarousel from './CustomCarousel';
 
 const DATA = [
@@ -38,10 +38,16 @@ const DATA = [
   },
 ];
 
-const Introduction = ({ navigation, intro, user, setIntro }) => {
+const Introduction = ({ navigation, setUser, intro, setIntro }) => {
   useEffect(() => {
-    navigation.navigate('Home');
-  }, [user]);
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUser(JSON.parse(value));
+        navigation.navigate('Home');
+      }
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>

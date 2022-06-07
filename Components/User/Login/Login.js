@@ -33,6 +33,12 @@ const Login = ({ navigation, setUser }) => {
   };
 
   useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        navigation.navigate('Home');
+      }
+    })();
     fetchUsers();
   }, []);
 
@@ -75,51 +81,51 @@ const Login = ({ navigation, setUser }) => {
           </Text>
           <Text style={styles.text}>Email</Text>
           <Input
-            placeholder="John.doe@gmail.com"
-            type="email"
+            placeholder='John.doe@gmail.com'
+            type='email'
             value={email}
             onChangeText={(e) => setEmail(e)}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <EmailIcon
-                name="email-check-outline"
-                color="#00F0FF"
+                name='email-check-outline'
+                color='#00F0FF'
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           <Text style={styles.text}>Password</Text>
           <Input
-            placeholder="******************"
+            placeholder='******************'
             secureTextEntry
-            type="password"
+            type='password'
             value={password}
             onChangeText={(e) => setPassword(e)}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <PasswordIcon
-                name="key"
-                color="#00F0FF"
+                name='key'
+                color='#00F0FF'
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           {isLoading ? (
             <Button
-              type="solid"
-              color="#3D1273"
-              radius="16"
+              type='solid'
+              color='#3D1273'
+              radius='16'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               loading
             />
           ) : (
             <Button
-              type="solid"
-              radius="16"
-              title="Log in"
+              type='solid'
+              radius='16'
+              title='Log in'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={handleClick}

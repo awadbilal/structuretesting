@@ -8,15 +8,10 @@ import QRCode from 'react-native-qrcode-svg';
 import { doc, addDoc, updateDoc, collection, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from '../SingleProjectPage/style';
+import { AsyncStorage } from 'react-native';
 
-const CreateProject = ({
-  navigation,
-  user,
-  setUser,
-  update,
-  setUpdate,
-  fetchData,
-}) => {
+const CreateProject = ({ navigation, update, setUpdate, fetchData }) => {
+  const [user, setUser] = useState();
   const [users, setUsers] = useState([]);
   const [title, setTitle] = useState('New Project');
   const [levelsNumber, setLevelsNumber] = useState(1);
@@ -26,19 +21,17 @@ const CreateProject = ({
   const [accelerometer, setAccelerometer] = useState();
   const [isReady, setIsReady] = useState(false);
   const [updateData, setUpdateData] = useState(false);
-  const [counter, setCounter] = useState(0);
 
   // Initializing the project in the database
-  const initializeProject = async () => {
+  const initializeProject = async (userInfo) => {
     let date = new Date();
     date = date.toDateString().substring(4);
     date = `${date.substring(0, 6)}, ${date.substring(7)}`;
-
     const data = await {
       title: title,
       admin: {
-        id: user?.id,
-        name: user?.name,
+        id: userInfo?.id,
+        name: userInfo?.name,
       },
       date: date,
       levels: levelsNumber,
@@ -47,26 +40,42 @@ const CreateProject = ({
       alert(err)
     );
     await setUser({
-      ...user,
+      ...userInfo,
       projects:
-        Array.isArray(user?.projects) && user?.projects.length !== 0
-          ? [...user.projects, docRef?.id]
+        Array.isArray(userInfo?.projects) && userInfo?.projects.length !== 0
+          ? [...userInfo.projects, docRef?.id]
           : [docRef?.id],
     });
-    await updateDoc(doc(db, 'users', user?.id), {
+    await updateDoc(doc(db, 'users', userInfo?.id), {
       projects:
-        Array.isArray(user?.projects) && user?.projects.length !== 0
-          ? [...user.projects, docRef?.id]
+        Array.isArray(userInfo?.projects) && userInfo?.projects.length !== 0
+          ? [...userInfo.projects, docRef?.id]
           : [docRef?.id],
     }).catch((err) => alert(err));
     await setProjectCode(docRef?.id);
-    setCounter(counter + 1);
     fetchData();
   };
 
   useEffect(() => {
-    counter === 0 && initializeProject();
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        const currentUser = await JSON.parse(value);
+        await setUser(currentUser);
+        await initializeProject(currentUser);
+      }
+    })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+      } catch (error) {
+        // Error saving data
+      }
+    })();
+  }, [user]);
 
   async function handleSave() {
     const data = {

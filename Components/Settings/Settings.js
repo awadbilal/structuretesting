@@ -1,9 +1,10 @@
-import { AsyncStorage, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import React from 'react';
 import { Text, Button } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { AsyncStorage } from 'react-native';
 import { styles } from './style';
 
 const Settings = ({ navigation, setUser }) => {
@@ -18,22 +19,22 @@ const Settings = ({ navigation, setUser }) => {
         <View style={styles.itemContainer}>
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
-              name="account-circle-outline"
+              name='account-circle-outline'
               size={25}
               style={styles.icon}
             />
             <Button
-              type="clear"
-              radius="16"
-              title="Profile Settings"
+              type='clear'
+              radius='16'
+              title='Profile Settings'
               titleStyle={styles.itemButton}
               onPress={() => navigation.navigate('ProfileSettings')}
               iconRight={true}
               icon={
                 <MaterialIcons
-                  name="keyboard-arrow-right"
+                  name='keyboard-arrow-right'
                   size={25}
-                  color="#FEFEFE"
+                  color='#FEFEFE'
                 />
               }
             />
@@ -41,22 +42,22 @@ const Settings = ({ navigation, setUser }) => {
 
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
-              name="information-outline"
+              name='information-outline'
               size={25}
               style={styles.icon}
             />
             <Button
-              type="clear"
-              radius="16"
-              title="About Us"
+              type='clear'
+              radius='16'
+              title='About Us'
               titleStyle={styles.itemButton}
               onPress={() => navigation.navigate('AboutUs')}
               iconRight={true}
               icon={
                 <MaterialIcons
-                  name="keyboard-arrow-right"
+                  name='keyboard-arrow-right'
                   size={25}
-                  color="#FEFEFE"
+                  color='#FEFEFE'
                 />
               }
             />
@@ -64,60 +65,60 @@ const Settings = ({ navigation, setUser }) => {
 
           <View style={styles.itemInnerContainer}>
             <MaterialCommunityIcons
-              name="file-document-multiple-outline"
+              name='file-document-multiple-outline'
               size={25}
               style={styles.icon}
             />
             <Button
-              type="clear"
-              radius="16"
-              title="Terms And Conditions"
+              type='clear'
+              radius='16'
+              title='Terms And Conditions'
               titleStyle={styles.itemButton}
               onPress={() => navigation.navigate('TermsAndConditions')}
               iconRight={true}
               icon={
                 <MaterialIcons
-                  name="keyboard-arrow-right"
+                  name='keyboard-arrow-right'
                   size={25}
-                  color="#FEFEFE"
+                  color='#FEFEFE'
                 />
               }
             />
           </View>
 
           <View style={styles.itemInnerContainer}>
-            <MaterialIcons name="privacy-tip" size={25} style={styles.icon} />
+            <MaterialIcons name='privacy-tip' size={25} style={styles.icon} />
             <Button
-              type="clear"
-              radius="16"
-              title="Privacy Policy"
+              type='clear'
+              radius='16'
+              title='Privacy Policy'
               titleStyle={styles.itemButton}
               onPress={() => navigation.navigate('PrivacyPolicy')}
               iconRight={true}
               icon={
                 <MaterialIcons
-                  name="keyboard-arrow-right"
+                  name='keyboard-arrow-right'
                   size={25}
-                  color="#FEFEFE"
+                  color='#FEFEFE'
                 />
               }
             />
           </View>
 
           <View style={styles.itemInnerContainer}>
-            <AntDesign name="logout" size={25} style={styles.icon} />
+            <AntDesign name='logout' size={25} style={styles.icon} />
             <Button
-              type="clear"
-              radius="16"
-              title="Log out"
+              type='clear'
+              radius='16'
+              title='Log out'
               titleStyle={styles.itemButton}
               onPress={() => setIsLogout(!isLogout)}
               iconRight={true}
               icon={
                 <MaterialIcons
-                  name="keyboard-arrow-right"
+                  name='keyboard-arrow-right'
                   size={25}
-                  color="#FEFEFE"
+                  color='#FEFEFE'
                 />
               }
             />
@@ -130,9 +131,9 @@ const Settings = ({ navigation, setUser }) => {
               ]}
             >
               <Button
-                type="clear"
-                radius="16"
-                title="Cancel"
+                type='clear'
+                radius='16'
+                title='Cancel'
                 titleStyle={styles.itemButton}
                 containerStyle={{
                   width: '45%',
@@ -143,9 +144,9 @@ const Settings = ({ navigation, setUser }) => {
                 onPress={() => setIsLogout(!isLogout)}
               />
               <Button
-                type="clear"
-                radius="16"
-                title="Log out"
+                type='clear'
+                radius='16'
+                title='Log out'
                 titleStyle={styles.itemButton}
                 containerStyle={{
                   width: '45%',

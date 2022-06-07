@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Input } from 'react-native-elements';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -7,11 +7,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
+import { AsyncStorage } from 'react-native';
 
 const DropDowns = ({
   navigation,
-  user,
-  setUser,
   item,
   data1,
   data2,
@@ -24,6 +23,17 @@ const DropDowns = ({
   setValueDevice,
   fetchData,
 }) => {
+  const [user, setUser] = React.useState();
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUser(JSON.parse(value));
+      }
+    })();
+  }, []);
+
   const handleDelete = async () => {
     // Function to handle deleting the project
     item?.users?.forEach(async ({ id }) => {
@@ -42,6 +52,16 @@ const DropDowns = ({
     fetchData();
     navigation.pop(2);
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+      } catch (error) {
+        // Error saving data
+      }
+    })();
+  }, [user]);
 
   return (
     <>

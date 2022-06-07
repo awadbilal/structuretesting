@@ -5,14 +5,28 @@ import ListOfProjects from './ListOfProjects';
 import NoProjects from './NoProjects';
 import { Text } from 'react-native-elements';
 import { styles } from './style';
+import { AsyncStorage } from 'react-native';
 
-const Index = ({ navigation, data, user, fetchData }) => {
-  const [projects, setProjects] = useState(
-    Array.isArray(user.projects) && user.projects.length !== 0
-      ? data.filter(({ id }) => user?.projects.includes(id))
-      : []
-  );
+const Index = ({ navigation, data, fetchData }) => {
+  const [user, setUser] = useState();
+  const [projects, setProjects] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUser(JSON.parse(value));
+        const currentUser = await JSON.parse(value);
+        setProjects(
+          Array.isArray(currentUser.projects) &&
+            currentUser.projects.length !== 0
+            ? data.filter(({ id }) => currentUser?.projects.includes(id))
+            : []
+        );
+      }
+    })();
+  }, []);
 
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -39,7 +53,7 @@ const Index = ({ navigation, data, user, fetchData }) => {
             <ListOfProjects data={projects} navigation={navigation} />
           </>
         ) : (
-          <NoProjects />
+          <NoProjects navigation={navigation} />
         )}
       </View>
     </ScrollView>

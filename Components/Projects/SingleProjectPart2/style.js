@@ -103,4 +103,12 @@ export const styles = StyleSheet.create({
     color: '#FEFEFE',
     textAlign: 'left',
   },
+  inviteAndContinue: {
+    width: '100%',
+    paddingVertical: 14,
+    backgroundColor: '#3D1273',
+    borderRadius: 16,
+    textAlign: 'left',
+    marginTop: 20,
+  },
 });

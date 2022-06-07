@@ -8,20 +8,41 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Input, Text } from 'react-native-elements';
 import { styles } from './style';
+import { AsyncStorage } from 'react-native';
 
-const Index = ({ navigation, user, data, fetchData }) => {
+const Index = ({ navigation, data, fetchData }) => {
   const [search, setSearch] = useState('');
-  const [projects, setProjects] = useState(
-    Array.isArray(user.projects) && user.projects.length !== 0
-      ? data.filter(({ id }) => user?.projects.includes(id))
-      : []
-  );
+  const [projects, setProjects] = useState([]);
+  const [projectsToRender, setProjectsToRender] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        const currentUser = await JSON.parse(value);
+        setProjects(
+          Array.isArray(currentUser.projects) &&
+            currentUser.projects.length !== 0
+            ? data.filter(({ id }) => currentUser?.projects.includes(id))
+            : []
+        );
+        setProjectsToRender(
+          Array.isArray(currentUser.projects) &&
+            currentUser.projects.length !== 0
+            ? data.filter(({ id }) => currentUser?.projects.includes(id))
+            : []
+        );
+      }
+    })();
+  }, []);
 
   // Filtering the projects according to title
   useEffect(() => {
     if (Array.isArray(projects) && projects.length !== 0) {
-      setProjects(projects?.filter((item) => item?.title?.includes(search)));
+      setProjectsToRender(
+        projects?.filter((item) => item?.title?.includes(search))
+      );
     }
   }, [search]);
 
@@ -46,31 +67,31 @@ const Index = ({ navigation, user, data, fetchData }) => {
         <View style={styles.header}>
           <Text style={styles.title}>Projects List</Text>
           <Ionicons
-            name="add"
-            color="#FEFEFE"
+            name='add'
+            color='#FEFEFE'
             size={30}
             onPress={() => navigation.navigate('CreateProject')}
           />
         </View>
         <Input
-          placeholder="Search Projects..."
-          type="text"
+          placeholder='Search Projects...'
+          type='text'
           value={search}
           onChangeText={(e) => setSearch(e)}
           inputContainerStyle={styles.searchBar}
           containerStyle={{ width: '100%' }}
           leftIcon={
             <Ionicons
-              name="search"
-              color="#FEFEFE"
+              name='search'
+              color='#FEFEFE'
               size={20}
               style={{ marginHorizontal: 10 }}
             />
           }
         />
-        {Array.isArray(projects) &&
-          projects.length !== 0 &&
-          projects?.map((item) => {
+        {Array.isArray(projectsToRender) &&
+          projectsToRender.length !== 0 &&
+          projectsToRender?.map((item) => {
             return (
               <TouchableOpacity
                 style={styles.project}

@@ -8,14 +8,25 @@ import QRCode from 'react-native-qrcode-svg';
 import { doc, updateDoc, deleteField, getDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { styles } from './style';
+import { AsyncStorage } from 'react-native';
 
-const SingleProject = ({ navigation, item, user, fetchData }) => {
+const SingleProject = ({ navigation, item, fetchData }) => {
+  const [user, setUser] = useState();
   const [isEditable, setIsEditable] = useState(false);
   const [users, setUsers] = useState(
     Array.isArray(item?.users) && item?.users.length !== 0 ? item.users : []
   );
   const [title, setTitle] = useState(item?.title);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUser(JSON.parse(value));
+      }
+    })();
+  }, []);
 
   const handleSave = async () => {
     setIsEditable(!isEditable);
@@ -68,7 +79,7 @@ const SingleProject = ({ navigation, item, user, fetchData }) => {
               disabled={isEditable ? false : true}
             />
           </View>
-          {user.id === item?.admin.id && (
+          {user?.id === item?.admin.id && (
             <View style={{ width: '20%' }}>
               {isEditable ? (
                 <Octicons
@@ -139,7 +150,7 @@ const SingleProject = ({ navigation, item, user, fetchData }) => {
             </>
           )}
         </View>
-        {user.id === item?.admin.id && (
+        {user?.id === item?.admin.id && (
           <Button
             type='solid'
             radius='16'

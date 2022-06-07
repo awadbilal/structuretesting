@@ -48,18 +48,6 @@ const Links = ({ navigation }) => {
 
   // Fetching and sorting data from Firestore
   async function fetchData() {
-    // Fetch and update user Info
-    if (user) {
-      const userSnapshot = await getDoc(doc(db, 'users', user.id));
-      const userInfo = await { id: doc.id, ...userSnapshot.data() };
-      setUser(userInfo);
-      try {
-        AsyncStorage.setItem('user', JSON.stringify(userInfo));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
     // Fetching Projects List
     const projectsSnapshot = await getDocs(collection(db, 'projects'));
     const newArr = [];
@@ -78,20 +66,18 @@ const Links = ({ navigation }) => {
     await setProjectsList(newArr);
   }
 
-  if (projectsList.length === 0) fetchData();
-
   useEffect(() => {
     (async () => {
       const value = await AsyncStorage.getItem('user');
       if (value !== null) {
-        setUser(JSON.parse(value));
+        const currentUser = await JSON.parse(value);
+        await setUser(currentUser);
+        await fetchData();
       }
     })();
   }, []);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [refreshing, update]);
+  if (projectsList.length === 0) fetchData();
 
   const MyTheme = {
     ...DefaultTheme,
@@ -134,29 +120,18 @@ const Links = ({ navigation }) => {
       >
         <Tab.Screen name='Home' options={{ headerShown: false }}>
           {(props) => (
-            <Home
-              {...props}
-              data={projectsList}
-              user={user}
-              fetchData={fetchData}
-            />
+            <Home {...props} data={projectsList} fetchData={fetchData} />
           )}
         </Tab.Screen>
         <Tab.Screen name='Projects' options={{ headerShown: false }}>
           {(props) => (
-            <Projects
-              {...props}
-              data={projectsList}
-              user={user}
-              fetchData={fetchData}
-            />
+            <Projects {...props} data={projectsList} fetchData={fetchData} />
           )}
         </Tab.Screen>
         <Tab.Screen name='Scan' options={{ headerShown: false }}>
           {(props) => (
             <Scan
               {...props}
-              user={user}
               projectsList={projectsList}
               setProjectsList={setProjectsList}
             />
@@ -175,8 +150,8 @@ const Links = ({ navigation }) => {
       {(props) => (
         <Introduction
           {...props}
+          setUser={setUser}
           intro={intro}
-          user={user}
           setIntro={setIntro}
         />
       )}
@@ -185,9 +160,6 @@ const Links = ({ navigation }) => {
 
   // CREDENTIALS contains all the navigation for user credentials pages.
   const CREDENTIALS = [
-    // <Stack.Screen name='Register'>
-    //   {(props) => <Register {...props} setUser={setUser} />}
-    // </Stack.Screen>,
     <Stack.Screen name='Register'>
       {(props) => <EmailRegister {...props} setUser={setUser} />}
     </Stack.Screen>,
@@ -205,12 +177,7 @@ const Links = ({ navigation }) => {
       return (
         <Stack.Screen key={`${item?.id}part1`} name={`${item?.id}`}>
           {(props) => (
-            <SingleProject
-              {...props}
-              item={item}
-              user={user}
-              fetchData={fetchData}
-            />
+            <SingleProject {...props} item={item} fetchData={fetchData} />
           )}
         </Stack.Screen>
       );
@@ -219,13 +186,7 @@ const Links = ({ navigation }) => {
       return (
         <Stack.Screen key={`${item?.id}part2`} name={`${item?.id}part2`}>
           {(props) => (
-            <SingleProjectPart2
-              {...props}
-              user={user}
-              item={item}
-              setUser={setUser}
-              fetchData={fetchData}
-            />
+            <SingleProjectPart2 {...props} item={item} fetchData={fetchData} />
           )}
         </Stack.Screen>
       );
@@ -234,8 +195,6 @@ const Links = ({ navigation }) => {
       {(props) => (
         <CreateProject
           {...props}
-          user={user}
-          setUser={setUser}
           update={update}
           setUpdate={setUpdate}
           fetchData={fetchData}

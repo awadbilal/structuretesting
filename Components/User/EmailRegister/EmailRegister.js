@@ -4,7 +4,6 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  AsyncStorage,
   ScrollView,
 } from 'react-native';
 import { Button, Image, Input } from 'react-native-elements';
@@ -15,6 +14,7 @@ import PasswordIcon from 'react-native-vector-icons/Octicons';
 import { db } from '../../../firebase';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import '../../../firebase';
+import { AsyncStorage } from 'react-native';
 import { styles } from './style';
 
 const EmailRegister = ({ navigation, setUser }) => {
@@ -25,6 +25,15 @@ const EmailRegister = ({ navigation, setUser }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [usersList, setUsersList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        navigation.navigate('Home');
+      }
+    })();
+  }, []);
 
   // Fetching Users List
   const fetchUsers = async () => {
@@ -92,49 +101,49 @@ const EmailRegister = ({ navigation, setUser }) => {
 
           <Text style={styles.text}>Name</Text>
           <Input
-            placeholder="John Doe"
-            type="text"
+            placeholder='John Doe'
+            type='text'
             value={formData.name}
             onChangeText={(e) => setFormData({ ...formData, name: e })}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <UserIcon
-                name="user"
-                color="#00F0FF"
+                name='user'
+                color='#00F0FF'
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           <Text style={styles.text}>Email</Text>
           <Input
-            placeholder="John.doe@gmail.com"
-            type="email"
+            placeholder='John.doe@gmail.com'
+            type='email'
             value={formData.email}
             onChangeText={(e) => setFormData({ ...formData, email: e })}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <EmailIcon
-                name="email-check-outline"
-                color="#00F0FF"
+                name='email-check-outline'
+                color='#00F0FF'
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
           />
           <Text style={styles.text}>Password</Text>
           <Input
-            placeholder="******************"
+            placeholder='******************'
             secureTextEntry
-            type="password"
+            type='password'
             value={formData.password}
             onChangeText={(e) => setFormData({ ...formData, password: e })}
             style={{ color: '#FFF' }}
             inputContainerStyle={[styles.input]}
             leftIcon={
               <PasswordIcon
-                name="key"
-                color="#00F0FF"
+                name='key'
+                color='#00F0FF'
                 style={{ marginRight: 20, fontSize: 22 }}
               />
             }
@@ -142,18 +151,18 @@ const EmailRegister = ({ navigation, setUser }) => {
 
           {isLoading ? (
             <Button
-              type="solid"
-              color="#3D1273"
-              radius="16"
+              type='solid'
+              color='#3D1273'
+              radius='16'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               loading
             />
           ) : (
             <Button
-              type="solid"
-              radius="16"
-              title="Get Started"
+              type='solid'
+              radius='16'
+              title='Get Started'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={handleClick}

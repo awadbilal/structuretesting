@@ -8,8 +8,9 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { styles } from './style';
 import QRScan from './QRScan';
+import { AsyncStorage } from 'react-native';
 
-const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
+const Scan = ({ navigation, projectsList, setProjectsList }) => {
   const [projectCode, setProjectCode] = useState();
   const [isReady, setIsReady] = useState(false);
   const [gyroscope, setGyroscope] = useState();
@@ -17,6 +18,26 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
   const [updateData, setUpdateData] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [start, setStart] = useState(false);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        await setUser(JSON.parse(value));
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+      } catch (error) {
+        // Error saving data
+      }
+    })();
+  }, [user]);
 
   const handleJoin = async () => {
     // Handle Join Functionality
@@ -97,8 +118,8 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
               <Text style={styles.title}>Join Project</Text>
             </View>
             <Input
-              placeholder="K4z5mZeFa153"
-              type="text"
+              placeholder='K4z5mZeFa153'
+              type='text'
               value={projectCode}
               onChangeText={(e) => setProjectCode(e)}
               style={{ color: '#FFF' }}
@@ -119,9 +140,9 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
               }
             />
             <Button
-              type="solid"
-              radius="16"
-              title="Join Project"
+              type='solid'
+              radius='16'
+              title='Join Project'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => handleJoin()}
@@ -139,9 +160,9 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
               </View>
             )}
             <Button
-              type="solid"
-              radius="16"
-              title="Scan QR Code to join instead"
+              type='solid'
+              radius='16'
+              title='Scan QR Code to join instead'
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.button}
               onPress={() => {
@@ -165,9 +186,9 @@ const Scan = ({ navigation, user, setUser, projectsList, setProjectsList }) => {
               check your project
             </Text>
             <Button
-              type="solid"
-              radius="16"
-              title="View projects list"
+              type='solid'
+              radius='16'
+              title='View projects list'
               titleStyle={styles.buttonTitle}
               buttonStyle={{ backgroundColor: '#3D1273' }}
               containerStyle={styles.inviteAndContinue}
